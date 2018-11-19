@@ -26,7 +26,7 @@ class ActivityNoms : AppCompatActivity() {
 
     private fun refreshAdapter(){
         val allNoms = DataAccess(this).getAll()
-        val adapter = AdapterNoms(allNoms, this::onCreateNewNoms)
+        val adapter = AdapterNoms(this, allNoms, this::onCreateNewNoms)
         recyclerView!!.adapter = adapter
     }
 
