@@ -43,7 +43,41 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
 
         items.forEach( {modelNoms: ModelNoms -> Log.i("DataAccess", "[${modelNoms.itemId}, ${modelNoms.name}, ${modelNoms.subtitle}]") })
 
+        Log.i("DataAccess", "Got ${items.size} from db")
         return items;
+    }
+
+    fun getNomById(nomId: Long) : ModelNoms? {
+        val cursor = readableDatabase!!.query(
+            NomsDataAccessContract.FeedEntry.TABLE_NOMS,
+            arrayOf(NomsDataAccessContract.FeedEntry.COLUMN_ID,
+                NomsDataAccessContract.FeedEntry.COLUMN_NAME_TITLE,
+                NomsDataAccessContract.FeedEntry.COLUMN_NAME_SUBTITLE,
+                NomsDataAccessContract.FeedEntry.COLUMN_NAME_DESCRIPTION,
+                NomsDataAccessContract.FeedEntry.COLUMN_NAME_LATEST_DATE),
+            "${NomsDataAccessContract.FeedEntry.COLUMN_ID}=?",
+            arrayOf(nomId.toString()),
+            null,
+            null,
+            NomsDataAccessContract.FeedEntry.COLUMN_NAME_TITLE
+        )
+
+        var modelNoms:ModelNoms? = null
+        with(cursor) {
+            while(moveToNext()){
+                val itemId = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_ID))
+                val name = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_TITLE))
+                val subtitle = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_SUBTITLE))
+                val description = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_DESCRIPTION))
+                val latestDate = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_LATEST_DATE))
+                modelNoms = ModelNoms(itemId, name, subtitle, description, latestDate)
+            }
+        }
+
+        readableDatabase!!.close()
+
+        Log.i("DataAccess", "Got ${modelNoms?.name} from db")
+        return modelNoms;
     }
 
     fun insertNomEvent(nomEvent: ModelNomEvent){
@@ -81,6 +115,22 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
             updateValues,
             "${NomsDataAccessContract.FeedEntry.COLUMN_ID}=?",
             arrayOf(id.toString()) )
+
+        Log.i("DataAccess", "Updated id $id with $date")
+    }
+
+    private fun deleteIdFromTable(nomId: Long, table: String, column: String){
+        val deletedItems = writableDatabase.delete(
+            table,
+            "${column}=?",
+             arrayOf(nomId.toString()))
+        Log.i("DataAccess", "Deleted $deletedItems (nomId $nomId) from $table")
+    }
+
+    fun deleteNomById(id: Long){
+        deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_IMAGE, NomsDataAccessContract.FeedEntry.COLUMN_NOMS_ID_KEY)
+        deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_EVENT, NomsDataAccessContract.FeedEntry.COLUMN_NOMS_ID_KEY)
+        deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_NOMS, NomsDataAccessContract.FeedEntry.COLUMN_ID)
     }
 
     override fun onCreate(db: SQLiteDatabase?) {

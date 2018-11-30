@@ -1,8 +1,11 @@
 package rolf.nomnoms.nomnoms.dataaccess
 
+import android.os.Build
 import android.os.Environment
 import android.provider.BaseColumns
+import android.support.annotation.RequiresApi
 import android.util.Log
+import java.io.File
 import java.nio.file.Paths
 
 object NomsDataAccessContract {
@@ -21,11 +24,17 @@ object NomsDataAccessContract {
         val rootPath = Environment.getExternalStorageDirectory().toString()
         val dbName = if(useDebugDatabase) FeedEntry.DATABASE_NAME_DEBUG else FeedEntry.DATABASE_NAME
 
-        val dbPath = Paths.get(
-                        rootPath,
-                        FeedEntry.DB_PATH,
-                        dbName)
-                    .toString()
+        val dbPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            Paths.get(
+                            rootPath,
+                            FeedEntry.DB_PATH,
+                            dbName)
+                        .toString()
+        } else {
+            val dbFile = File(File(rootPath, FeedEntry.DB_PATH), dbName)
+            Log.i("DbPath", dbFile.toString())
+            return dbFile.toString()
+        }
 
         Log.i("DbPath", dbPath)
         return dbPath

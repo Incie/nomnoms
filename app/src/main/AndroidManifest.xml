@@ -22,6 +22,8 @@
         </activity>
         <activity android:name=".ActivityGallery">
         </activity>
+        <activity android:name=".ActivityNomsView">
+        </activity>
     </application>
 
 </manifest>

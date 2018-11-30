@@ -19,9 +19,9 @@ class ActivityNomsAdd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms_add)
 
-        nomName = findViewById(R.id.edittext_name)
-        nomSubtitle = findViewById(R.id.edittext_subtitle)
-        nomDescription = findViewById(R.id.edittext_description)
+        nomName = findViewById(R.id.textview_name)
+        nomSubtitle = findViewById(R.id.textview_subtitle_nom)
+        nomDescription = findViewById(R.id.textview_description_noms)
         findViewById<Button>(R.id.button_abort).setOnClickListener {finish()}
 
         findViewById<Button>(R.id.button_save_and_add_more).setOnClickListener {
