@@ -7,13 +7,22 @@
         android:layout_height="match_parent"
         tools:context=".ActivityGallery">
 
-    <android.support.v4.view.ViewPager
-            android:id="@+id/viewflipper"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp" app:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/image_present" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/recyclerview_images"/>
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="0dp"
+            android:layout_height="82dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
+            android:layout_marginEnd="8dp"
+            tools:listitem="@layout/listitem_gallery"
+            android:id="@+id/recyclerview_images"/>
 </android.support.constraint.ConstraintLayout>

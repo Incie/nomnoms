@@ -6,7 +6,7 @@
         android:layout_height="86dp">
 
     <TextView
-            android:text="FoodyNomsHere"
+            tools:text="FoodyNomsHere"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/text_nom_title"
@@ -20,29 +20,43 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/image_test"
             app:layout_constraintHorizontal_bias="0.0"/>
+
     <ImageView
             android:layout_width="56dp"
-            android:layout_height="56dp" app:srcCompat="@mipmap/ic_launcher"
-            android:id="@+id/image_test" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent" android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"/>
+            android:layout_height="56dp"
+            tools:srcCompat="@mipmap/ic_launcher"
+            android:id="@+id/image_test"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="image"/>
+
     <TextView
-            android:text="SubtitleHere"
+            tools:text="SubtitleHere"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_nom_subtitle" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/text_nom_subtitle"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@+id/text_nom_title"
-            android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/text_nom_title"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:textStyle="italic"
-            app:layout_constraintVertical_bias="0.0" android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/text_last_event" app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/text_last_event"
+            app:layout_constraintHorizontal_bias="0.0"/>
     <TextView
-            android:text="[0]"
+            tools:text="[0]"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_last_event" app:layout_constraintEnd_toStartOf="@+id/image_test"
-            android:layout_marginEnd="16dp" android:layout_marginBottom="16dp"
+            android:id="@+id/text_last_event"
+            app:layout_constraintEnd_toStartOf="@+id/image_test"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 </android.support.constraint.ConstraintLayout>
