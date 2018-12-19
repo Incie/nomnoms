@@ -2,7 +2,10 @@ package rolf.nomnoms.nomnoms
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.widget.TextView
+import rolf.nomnoms.nomnoms.adapter.AdapterNomEvents
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
 
 class ActivityNomsView : AppCompatActivity() {
@@ -30,9 +33,12 @@ class ActivityNomsView : AppCompatActivity() {
         findViewById<TextView>(R.id.textview_name).text = model.name
         findViewById<TextView>(R.id.textview_subtitle_nom).text = model.subtitle
         findViewById<TextView>(R.id.textview_description_noms).text = model.description
+        val recView = findViewById<RecyclerView>(R.id.recyclerview_events)
+
+        val nomEvents = DataAccess(this).getEventsByNomId(nomId)
+        recView.adapter = AdapterNomEvents(this, nomEvents)
+        recView.layoutManager = LinearLayoutManager(this)
 
         //get images
-        //get events
-
     }
 }

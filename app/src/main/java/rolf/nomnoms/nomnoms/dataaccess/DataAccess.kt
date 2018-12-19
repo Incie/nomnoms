@@ -47,6 +47,30 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
         return items;
     }
 
+    fun getEventsByNomId(nomId: Long) : List<ModelNomEvent> {
+        val cursor = readableDatabase!!.query(
+            NomsDataAccessContract.FeedEntry.TABLE_EVENT,
+            arrayOf(NomsDataAccessContract.FeedEntry.COLUMN_ID,
+                NomsDataAccessContract.FeedEntry.COLUMN_NAME_DATE),
+            "${NomsDataAccessContract.FeedEntry.COLUMN_NOMS_ID_KEY}=?",
+            arrayOf(nomId.toString()),
+            null,
+            null,
+            NomsDataAccessContract.FeedEntry.COLUMN_NAME_DATE);
+
+        val eventList = ArrayList<ModelNomEvent>()
+        with(cursor){
+            while(moveToNext()){
+                val eventId = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_ID))
+                val date = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_DATE))
+
+                eventList.add( ModelNomEvent(eventId, nomId, date))
+            }
+        }
+
+        return eventList
+    }
+
     fun getNomById(nomId: Long) : ModelNoms? {
         val cursor = readableDatabase!!.query(
             NomsDataAccessContract.FeedEntry.TABLE_NOMS,
@@ -135,14 +159,14 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
 
     override fun onCreate(db: SQLiteDatabase?) {
         db!!.execSQL(NomsDataAccessContract.SQL_CREATE_ENTRIES)
-        db!!.execSQL(NomsDataAccessContract.SQL_CREATE_IMAGES)
-        db!!.execSQL(NomsDataAccessContract.SQL_CREATE_EVENTS)
+        db.execSQL(NomsDataAccessContract.SQL_CREATE_IMAGES)
+        db.execSQL(NomsDataAccessContract.SQL_CREATE_EVENTS)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         db!!.execSQL(NomsDataAccessContract.SQL_DELETE_ENTRIES)
-        db!!.execSQL(NomsDataAccessContract.SQL_DELETE_IMAGES)
-        db!!.execSQL(NomsDataAccessContract.SQL_DELETE_EVENTS)
+        db.execSQL(NomsDataAccessContract.SQL_DELETE_IMAGES)
+        db.execSQL(NomsDataAccessContract.SQL_DELETE_EVENTS)
         onCreate(db)
     }
 }

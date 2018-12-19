@@ -17,10 +17,10 @@ enum class AdapterNomsEvent {
 }
 
 class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, itemId: Int) -> Unit ) : RecyclerView.ViewHolder(view) {
-    val textTitle = view.text_nom_title
-    val textSubtitle = view.text_nom_subtitle
-    val textLastEvent = view.text_last_event
-    val imageTest: ImageView = view.image_test
+    private val textTitle = view.text_nom_title
+    private val textSubtitle = view.text_nom_subtitle
+    private val textLastEvent = view.text_last_event
+    private val imageTest: ImageView = view.image_test
 
     private var model: ModelNoms = ModelNoms(-1, "", "", "", 0)
 
@@ -32,23 +32,22 @@ class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, item
         imageTest.setOnClickListener(this::onImageClick)
     }
 
-    fun onRowLongClick(v: View?):Boolean{
+    private fun onRowLongClick(v: View?):Boolean{
         Log.i("NomsViewHolder", "Delete $adapterPosition")
         viewEvent(AdapterNomsEvent.DELETE_NOMS, adapterPosition)
         return true
     }
 
-    fun onRowClick(v: View?){
+    private fun onRowClick(v: View?){
+        Log.i("NomsViewHolder", "View $adapterPosition - $model.name")
         viewEvent(AdapterNomsEvent.VIEW_NOMS, adapterPosition)
     }
 
-    fun onImageClick(v: View?){
+    private fun onImageClick(v: View?){
         viewEvent(AdapterNomsEvent.NEW_EVENT_NOMS, adapterPosition)
     }
 
     fun bind(modelNoms : ModelNoms){
-        Log.i("NomsViewHolder", "Bind ${modelNoms.itemId}, ${modelNoms.latestDate}")
-
         this.model = modelNoms
 
         isImageFitToScreen = false
