@@ -55,18 +55,22 @@ class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, item
         textSubtitle.text = modelNoms.subtitle
 
         if( modelNoms.latestDate != 0L ) {
-            val calendar = Calendar.getInstance()
 
-            val oneDayInMillis = 1000L * 60L * 60L * 24L
-            val now = calendar.timeInMillis - (modelNoms.latestDate - (modelNoms.latestDate% oneDayInMillis))
-            val daysSinceLast = now / oneDayInMillis;
-
-            val weeksSinceLast = daysSinceLast / 7;
-
-            if( weeksSinceLast > 0 )
-                textLastEvent.text = "${weeksSinceLast.toString()}w ${(daysSinceLast % 7).toString()}d"
-            else
-                textLastEvent.text = "${daysSinceLast.toString()}d"
         } else textLastEvent.text = "<>"
+    }
+
+    fun getSpan(epoch: Long){
+        val calendar = Calendar.getInstance()
+
+        val oneDayInMillis = 1000L * 60L * 60L * 24L
+        val now = calendar.timeInMillis - (epoch - (epoch% oneDayInMillis))
+        val daysSinceLast = now / oneDayInMillis;
+
+        val weeksSinceLast = daysSinceLast / 7;
+
+        if( weeksSinceLast > 0 )
+            textLastEvent.text = "${weeksSinceLast.toString()}w ${(daysSinceLast % 7).toString()}d"
+        else
+            textLastEvent.text = "${daysSinceLast.toString()}d"
     }
 }

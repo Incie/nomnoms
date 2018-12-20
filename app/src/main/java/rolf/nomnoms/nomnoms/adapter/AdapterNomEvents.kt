@@ -39,6 +39,4 @@ class AdapterNomEvents (
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ViewHolderNomEvent).bind(items[position])
     }
-
-
 }

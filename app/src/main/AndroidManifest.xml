@@ -18,12 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityNomsAdd">
-        </activity>
-        <activity android:name=".ActivityGallery">
-        </activity>
-        <activity android:name=".ActivityNomsView">
-        </activity>
+        <activity android:name=".ActivityNomsAdd"></activity>
+        <activity android:name=".ActivityGallery"></activity>
+        <activity android:name=".ActivityNomsView"></activity>
+        <activity android:name=".ActivityNomEvents"></activity>
     </application>
 
 </manifest>

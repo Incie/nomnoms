@@ -25,10 +25,9 @@ object NomsDataAccessContract {
         val dbName = if(useDebugDatabase) FeedEntry.DATABASE_NAME_DEBUG else FeedEntry.DATABASE_NAME
 
         val dbPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            Paths.get(
-                            rootPath,
-                            FeedEntry.DB_PATH,
-                            dbName)
+            Paths.get(rootPath,
+                      FeedEntry.DB_PATH,
+                      dbName)
                         .toString()
         } else {
             val dbFile = File(File(rootPath, FeedEntry.DB_PATH), dbName)
@@ -55,6 +54,8 @@ object NomsDataAccessContract {
             "${FeedEntry.COLUMN_NOMS_ID_KEY} INTEGER NOT NULL, " +
             "${FeedEntry.COLUMN_NAME_IMAGEPATH} TEXT NOT NULL, " +
             "FOREIGN KEY(${FeedEntry.COLUMN_NOMS_ID_KEY}) REFERENCES nomstable(${FeedEntry.COLUMN_ID}) )"
+
+    const val SQL_RAWQUERY_GET_EVENTS = "SELECT t_event.${FeedEntry.COLUMN_ID}, t_noms.${FeedEntry.COLUMN_ID}, t_noms.${FeedEntry.COLUMN_NAME_TITLE}, t_noms.${FeedEntry.COLUMN_NAME_SUBTITLE}, t_event.${FeedEntry.COLUMN_NAME_DATE} FROM ${FeedEntry.TABLE_EVENT} t_event INNER JOIN ${FeedEntry.TABLE_NOMS} t_noms ON t_event.${FeedEntry.COLUMN_NOMS_ID_KEY}=t_noms.${FeedEntry.COLUMN_ID} WHERE t_noms.${FeedEntry.COLUMN_ID} = t_event.${FeedEntry.COLUMN_NOMS_ID_KEY}"
 
 
     const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${FeedEntry.TABLE_NOMS}"

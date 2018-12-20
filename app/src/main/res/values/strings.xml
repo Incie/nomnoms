@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">NomNoms</string>
+    <string name="menu_nom_newnom">New..</string>
+    <string name="menu_nom_eventlog">Event Log</string>
     <string name="title_name_of_noms">Name of Noms</string>
     <string name="edit">Edit</string>
     <string name="title_subtitle">Subtitle</string>

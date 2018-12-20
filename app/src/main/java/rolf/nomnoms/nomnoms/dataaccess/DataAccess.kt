@@ -104,6 +104,30 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
         return modelNoms;
     }
 
+    fun getNomEvents() : List<NomEventViewModel> {
+        val cursor = readableDatabase!!.rawQuery(
+            NomsDataAccessContract.SQL_RAWQUERY_GET_EVENTS,
+            arrayOf()
+        )
+
+        val nomEventViewModels = ArrayList<NomEventViewModel>()
+        with(cursor) {
+            while(moveToNext()) {
+                val eventId = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_ID))
+                val nomId = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_ID))
+                val title = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_TITLE))
+                val subtitle = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_SUBTITLE))
+                val date = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_DATE))
+
+                val nomEvent = ModelNomEvent(eventId, nomId, date)
+                val nom = ModelNoms(nomId, title, subtitle, "", 0)
+                nomEventViewModels.add(NomEventViewModel(nom, nomEvent))
+            }
+        }
+
+        return nomEventViewModels
+    }
+
     fun insertNomEvent(nomEvent: ModelNomEvent){
         val values = ContentValues().apply {
             put(NomsDataAccessContract.FeedEntry.COLUMN_NAME_DATE, nomEvent.date)
