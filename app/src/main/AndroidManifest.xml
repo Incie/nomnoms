@@ -11,17 +11,19 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ActivityNoms">
+
+        <activity android:name=".ActivityNoms"/>
+        <activity android:name=".ActivityNomsAdd"/>
+        <activity android:name=".ActivityGallery"/>
+        <activity android:name=".ActivityNomsView"/>
+        <activity android:name=".ActivityNomEvents"/>
+        <activity android:name=".ActivitySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityNomsAdd"></activity>
-        <activity android:name=".ActivityGallery"></activity>
-        <activity android:name=".ActivityNomsView"></activity>
-        <activity android:name=".ActivityNomEvents"></activity>
     </application>
 
 </manifest>

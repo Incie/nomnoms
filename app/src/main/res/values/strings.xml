@@ -6,4 +6,5 @@
     <string name="edit">Edit</string>
     <string name="title_subtitle">Subtitle</string>
     <string name="title_description">Description</string>
+    <string name="contentdescription_image">image</string>
 </resources>
