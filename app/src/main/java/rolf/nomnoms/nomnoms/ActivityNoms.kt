@@ -44,7 +44,7 @@ class ActivityNoms : AppCompatActivity() {
             AdapterNomsEvent.DELETE_NOMS -> {
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Delete?")
-                builder.setPositiveButton("YES") { dialog, which ->
+                builder.setPositiveButton("YES") { _, _ ->
 
                     DataAccess(this).deleteNomById(itemId)
                     refreshAdapter()

@@ -5,8 +5,8 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.listitem_noms.view.*
+import rolf.nomnoms.nomnoms.model.Epoch.Companion.getSpan
 import rolf.nomnoms.nomnoms.model.ModelNoms
-import java.util.*
 
 enum class AdapterNomsEvent {
     NEW_NOMS,
@@ -54,23 +54,9 @@ class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, item
         textTitle.text = modelNoms.name
         textSubtitle.text = modelNoms.subtitle
 
-        if( modelNoms.latestDate != 0L ) {
-
-        } else textLastEvent.text = "<>"
-    }
-
-    fun getSpan(epoch: Long){
-        val calendar = Calendar.getInstance()
-
-        val oneDayInMillis = 1000L * 60L * 60L * 24L
-        val now = calendar.timeInMillis - (epoch - (epoch% oneDayInMillis))
-        val daysSinceLast = now / oneDayInMillis;
-
-        val weeksSinceLast = daysSinceLast / 7;
-
-        if( weeksSinceLast > 0 )
-            textLastEvent.text = "${weeksSinceLast.toString()}w ${(daysSinceLast % 7).toString()}d"
+        if( modelNoms.latestDate == 0L )
+            textLastEvent.text = "<>"
         else
-            textLastEvent.text = "${daysSinceLast.toString()}d"
+            textLastEvent.text = getSpan(modelNoms.latestDate)
     }
 }

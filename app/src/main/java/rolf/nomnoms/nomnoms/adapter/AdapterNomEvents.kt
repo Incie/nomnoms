@@ -7,17 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.listitem_nom_event.view.*
 import rolf.nomnoms.nomnoms.R
+import rolf.nomnoms.nomnoms.model.Epoch.Companion.epochToDate
+import rolf.nomnoms.nomnoms.model.Epoch.Companion.epochToSpan
 import rolf.nomnoms.nomnoms.model.ModelNomEvent
-import rolf.nomnoms.nomnoms.model.ModelNoms
-import java.util.ArrayList
 
 class ViewHolderNomEvent(view: View) : RecyclerView.ViewHolder(view) {
     private val textTimespan = view.textview_timespan
     private val textDate = view.textview_date
+    private val textSpan = view.textview_span
 
     fun bind(nomEvent: ModelNomEvent) {
         textTimespan.text = "${nomEvent.nomId}, ${nomEvent.itemId}"
-        textDate.text = nomEvent.date.toString()
+
+        textSpan.text = epochToSpan(nomEvent.date)
+        textDate.text = epochToDate(nomEvent.date)
     }
 }
 

@@ -6,7 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
     <android.support.v7.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -17,8 +16,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/searchView"
-            android:id="@+id/recyclerview_events"/>
-    <SearchView
+            android:id="@+id/recyclerview_events"
+            tools:listitem="@layout/listitem_nom_events"/>
+
+    <android.support.v7.widget.SearchView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,5 +33,5 @@
             android:iconifiedByDefault="false"
             android:backgroundTintMode="src_in"
             android:backgroundTint="@color/colorAccent"
-            android:queryBackground="@mipmap/ic_launcher"/>
+            android:queryHint="Filter"/>
 </android.support.constraint.ConstraintLayout>

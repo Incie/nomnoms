@@ -55,7 +55,7 @@ object NomsDataAccessContract {
             "${FeedEntry.COLUMN_NAME_IMAGEPATH} TEXT NOT NULL, " +
             "FOREIGN KEY(${FeedEntry.COLUMN_NOMS_ID_KEY}) REFERENCES nomstable(${FeedEntry.COLUMN_ID}) )"
 
-    const val SQL_RAWQUERY_GET_EVENTS = "SELECT t_event.${FeedEntry.COLUMN_ID}, t_noms.${FeedEntry.COLUMN_ID}, t_noms.${FeedEntry.COLUMN_NAME_TITLE}, t_noms.${FeedEntry.COLUMN_NAME_SUBTITLE}, t_event.${FeedEntry.COLUMN_NAME_DATE} FROM ${FeedEntry.TABLE_EVENT} t_event INNER JOIN ${FeedEntry.TABLE_NOMS} t_noms ON t_event.${FeedEntry.COLUMN_NOMS_ID_KEY}=t_noms.${FeedEntry.COLUMN_ID} WHERE t_noms.${FeedEntry.COLUMN_ID} = t_event.${FeedEntry.COLUMN_NOMS_ID_KEY}"
+    const val SQL_RAWQUERY_GET_EVENTS = "SELECT t_event.${FeedEntry.COLUMN_ID}, t_noms.${FeedEntry.COLUMN_ID}, t_noms.${FeedEntry.COLUMN_NAME_TITLE}, t_noms.${FeedEntry.COLUMN_NAME_SUBTITLE}, t_event.${FeedEntry.COLUMN_NAME_DATE} FROM ${FeedEntry.TABLE_EVENT} t_event INNER JOIN ${FeedEntry.TABLE_NOMS} t_noms ON t_event.${FeedEntry.COLUMN_NOMS_ID_KEY}=t_noms.${FeedEntry.COLUMN_ID} WHERE t_noms.${FeedEntry.COLUMN_ID} = t_event.${FeedEntry.COLUMN_NOMS_ID_KEY} ORDER BY t_event.${FeedEntry.COLUMN_NAME_DATE} DESC"
 
 
     const val SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS ${FeedEntry.TABLE_NOMS}"

@@ -61,8 +61,8 @@ class AdapterNoms (
                     da.updateLatestNomDate(model.itemId, millis)
 
                     if( millis > model.latestDate ) {
-                        nomItems.set(adapterPosition.toInt(), ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis) )
-                        notifyItemChanged(adapterPosition.toInt())
+                        nomItems.set(adapterPosition, ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis) )
+                        notifyItemChanged(adapterPosition)
                     }
                 },
                 calendar.get(Calendar.YEAR),

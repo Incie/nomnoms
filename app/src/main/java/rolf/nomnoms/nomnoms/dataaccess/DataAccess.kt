@@ -170,15 +170,20 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
     private fun deleteIdFromTable(nomId: Long, table: String, column: String){
         val deletedItems = writableDatabase.delete(
             table,
-            "${column}=?",
-             arrayOf(nomId.toString()))
-        Log.i("DataAccess", "Deleted $deletedItems (nomId $nomId) from $table")
+            "$column=?",
+            arrayOf(nomId.toString()))
+
+        Log.i("DataAccess", "Deleted $deletedItems (id $nomId) from $table")
     }
 
     fun deleteNomById(id: Long){
         deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_IMAGE, NomsDataAccessContract.FeedEntry.COLUMN_NOMS_ID_KEY)
         deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_EVENT, NomsDataAccessContract.FeedEntry.COLUMN_NOMS_ID_KEY)
         deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_NOMS, NomsDataAccessContract.FeedEntry.COLUMN_ID)
+    }
+
+    fun deleteEventById(id: Long){
+        deleteIdFromTable(id, NomsDataAccessContract.FeedEntry.TABLE_EVENT, NomsDataAccessContract.FeedEntry.COLUMN_ID)
     }
 
     override fun onCreate(db: SQLiteDatabase?) {

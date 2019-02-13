@@ -32,7 +32,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
-            android:contentDescription="image"/>
+            android:contentDescription="image"
+            app:srcCompat="@mipmap/ic_launcher"/>
 
     <TextView
             tools:text="SubtitleHere"

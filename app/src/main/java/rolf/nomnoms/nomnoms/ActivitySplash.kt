@@ -47,17 +47,16 @@ class ActivitySplash : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if( isFinishing )
-            overridePendingTransition(R.anim.fade_in_100, R.anim.fade_out_100)
+        overridePendingTransition(R.anim.fade_in_100, R.anim.fade_out_100)
     }
 
 
     private fun startMainActivity(){
-        Timer("StartMainActivity", false).schedule(250) {
+        Timer("StartMainActivity", false)
+            .schedule(250) {
             val intent = Intent(this@ActivitySplash, ActivityNoms::class.java)
             startActivity(intent)
             finish()
-
         }
     }
 }

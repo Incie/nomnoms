@@ -2,6 +2,7 @@ package rolf.nomnoms.nomnoms
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.widget.TextView
@@ -23,7 +24,7 @@ class ActivityNomsView : AppCompatActivity() {
             return
         }
 
-        val model = DataAccess(this).getNomById(nomId as Long)
+        val model = DataAccess(this).getNomById(nomId)
 
         if( model == null ){
             finish();
@@ -33,11 +34,13 @@ class ActivityNomsView : AppCompatActivity() {
         findViewById<TextView>(R.id.textview_name).text = model.name
         findViewById<TextView>(R.id.textview_subtitle_nom).text = model.subtitle
         findViewById<TextView>(R.id.textview_description_noms).text = model.description
-        val recView = findViewById<RecyclerView>(R.id.recyclerview_events)
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_events)
 
         val nomEvents = DataAccess(this).getEventsByNomId(nomId)
-        recView.adapter = AdapterNomEvents(this, nomEvents)
-        recView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = AdapterNomEvents(this, nomEvents.reversed() )
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         //get images
     }
