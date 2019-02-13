@@ -7,4 +7,7 @@
     <string name="title_subtitle">Subtitle</string>
     <string name="title_description">Description</string>
     <string name="contentdescription_image">image</string>
+    <string name="menu_nom_sort_alphabetical">Sort [Alphabetical]</string>
+    <string name="menu_nom_sort_ascending">Sort [Asc]</string>
+    <string name="menu_nom_sort_descending">Sort [Desc]</string>
 </resources>

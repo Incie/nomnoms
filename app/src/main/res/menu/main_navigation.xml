@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/menu_nom_newnom" android:id="@+id/menu_nom_new"/>
-    <item android:title="@string/menu_nom_eventlog" android:id="@+id/menu_nom_events"/>
+    <item android:title="@string/menu_nom_newnom"
+          android:id="@+id/menu_nom_new"
+          android:icon="@drawable/ic_add"
+          app:showAsAction="always"/>
+
+    <item android:title="@string/menu_nom_eventlog"
+          android:id="@+id/menu_nom_events"
+          android:icon="@drawable/ic_clipboard"
+          app:showAsAction="ifRoom"/>
+
+    <item android:title="@string/menu_nom_sort_alphabetical"
+          android:id="@+id/menu_nom_sort_alphabetical"
+          android:icon="@drawable/ic_sort_alpha"
+          app:showAsAction="ifRoom"/>
+
+    <item android:title="@string/menu_nom_sort_ascending"
+          android:id="@+id/menu_nom_sort_ascending"
+          android:icon="@drawable/ic_sort"
+          app:showAsAction="ifRoom"/>
+
+    <item android:title="@string/menu_nom_sort_descending"
+          android:id="@+id/menu_nom_sort_descending"
+          android:icon="@drawable/ic_sort"
+          app:showAsAction="ifRoom"/>
 </menu>

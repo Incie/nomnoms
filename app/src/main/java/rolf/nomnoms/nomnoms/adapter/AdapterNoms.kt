@@ -12,6 +12,7 @@ import rolf.nomnoms.nomnoms.R
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
 import rolf.nomnoms.nomnoms.model.ModelNomEvent
 import rolf.nomnoms.nomnoms.model.ModelNoms
+import rolf.nomnoms.nomnoms.model.NomSort
 import java.util.*
 
 class AdapterNoms (
@@ -88,5 +89,29 @@ class AdapterNoms (
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ViewHolderNoms).bind(nomItems[position])
+    }
+
+    fun sort(sortType: NomSort) {
+        if(sortType == NomSort.Alphabetical ){
+            val list = nomItems.sortedWith(compareBy(ModelNoms::name))
+            nomItems.clear()
+            nomItems.addAll( list )
+
+        }
+
+        if( sortType == NomSort.Ascending ){
+            val list = nomItems.sortedWith(compareBy(ModelNoms::latestDate))
+            nomItems.clear()
+            nomItems.addAll( list )
+        }
+
+        if( sortType == NomSort.Descending ){
+            val list = nomItems.sortedWith(compareBy(ModelNoms::latestDate))
+            nomItems.clear()
+            nomItems.addAll( list )
+            nomItems.reverse()
+        }
+
+        notifyDataSetChanged()
     }
 }

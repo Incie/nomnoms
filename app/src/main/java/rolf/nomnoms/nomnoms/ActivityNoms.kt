@@ -13,6 +13,7 @@ import android.view.MenuItem
 import rolf.nomnoms.nomnoms.adapter.AdapterNoms
 import rolf.nomnoms.nomnoms.adapter.AdapterNomsEvent
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
+import rolf.nomnoms.nomnoms.model.NomSort
 
 class ActivityNoms : AppCompatActivity() {
 
@@ -36,10 +37,14 @@ class ActivityNoms : AppCompatActivity() {
         recyclerView!!.adapter = adapter
     }
 
+    private fun startNewNomActivity(){
+        startActivityForResult(Intent(this, ActivityNomsAdd::class.java), 666)
+    }
+
     private fun onNomEvent(event: AdapterNomsEvent, itemId: Long) {
         when( event ) {
             AdapterNomsEvent.NEW_EVENT_NOMS ->
-                startActivityForResult(Intent(this, ActivityNomsAdd::class.java), 666)
+                startNewNomActivity()
 
             AdapterNomsEvent.DELETE_NOMS -> {
                 val builder = AlertDialog.Builder(this)
@@ -66,15 +71,36 @@ class ActivityNoms : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = getMenuInflater()
+        val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.main_navigation, menu)
         return true;
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
         if( item!!.itemId == R.id.menu_nom_events ){
             val intent = Intent(this@ActivityNoms, ActivityNomEvents::class.java)
             startActivity(intent)
+            return true
+        }
+
+        if( item.itemId == R.id.menu_nom_new ){
+            startNewNomActivity()
+            return true
+        }
+
+        if( item.itemId == R.id.menu_nom_sort_alphabetical ){
+            (recyclerView?.adapter as AdapterNoms).sort( NomSort.Alphabetical )
+            return true
+        }
+
+        if( item.itemId == R.id.menu_nom_sort_ascending ){
+            (recyclerView?.adapter as AdapterNoms).sort( NomSort.Ascending )
+            return true
+        }
+
+        if( item.itemId == R.id.menu_nom_sort_descending ){
+            (recyclerView?.adapter as AdapterNoms).sort( NomSort.Descending )
             return true
         }
 
