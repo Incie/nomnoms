@@ -7,6 +7,10 @@ import android.widget.ImageView
 import kotlinx.android.synthetic.main.listitem_noms.view.*
 import rolf.nomnoms.nomnoms.model.Epoch.Companion.getSpan
 import rolf.nomnoms.nomnoms.model.ModelNoms
+import android.support.v4.util.Pair
+import com.bumptech.glide.Glide
+import rolf.nomnoms.nomnoms.R
+import rolf.nomnoms.nomnoms.dataaccess.DataAccess
 
 enum class AdapterNomsEvent {
     NEW_NOMS,
@@ -16,13 +20,13 @@ enum class AdapterNomsEvent {
     VIEW_NOMS
 }
 
-class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, itemId: Int) -> Unit ) : RecyclerView.ViewHolder(view) {
+class ViewHolderNoms(private val view: View, val viewEvent: (eventId: AdapterNomsEvent, itemId: Int, sharedView: Array<Pair<View,String>>?) -> Unit ) : RecyclerView.ViewHolder(view) {
     private val textTitle = view.text_nom_title
     private val textSubtitle = view.text_nom_subtitle
     private val textLastEvent = view.text_last_event
     private val imageTest: ImageView = view.image_test
 
-    private var model: ModelNoms = ModelNoms(-1, "", "", "", 0)
+    private var model: ModelNoms = ModelNoms(-1, "", "", "", 0, -1)
 
     private var isImageFitToScreen: Boolean = false
 
@@ -34,17 +38,19 @@ class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, item
 
     private fun onRowLongClick(v: View?):Boolean{
         Log.i("NomsViewHolder", "Delete $adapterPosition")
-        viewEvent(AdapterNomsEvent.DELETE_NOMS, adapterPosition)
+        viewEvent(AdapterNomsEvent.DELETE_NOMS, adapterPosition, null)
         return true
     }
 
     private fun onRowClick(v: View?){
         Log.i("NomsViewHolder", "View $adapterPosition - $model.name")
-        viewEvent(AdapterNomsEvent.VIEW_NOMS, adapterPosition)
+
+        val list : Array<Pair<View,String>> = arrayOf(Pair<View,String>(view, "nom_panel"), Pair<View,String>(imageTest, imageTest.transitionName) )
+        viewEvent(AdapterNomsEvent.VIEW_NOMS, adapterPosition, list)
     }
 
     private fun onImageClick(v: View?){
-        viewEvent(AdapterNomsEvent.NEW_EVENT_NOMS, adapterPosition)
+        viewEvent(AdapterNomsEvent.NEW_EVENT_NOMS, adapterPosition, null)
     }
 
     fun bind(modelNoms : ModelNoms){
@@ -58,5 +64,13 @@ class ViewHolderNoms(view: View, val viewEvent: (eventId: AdapterNomsEvent, item
             textLastEvent.text = "<>"
         else
             textLastEvent.text = getSpan(modelNoms.latestDate)
+
+        if( modelNoms.defaultImage < 0 )
+            Glide.with(view.context).load(R.drawable.ai_launcher).into(imageTest)
+        else {
+            val imagePath = DataAccess(view.context).getImagePathById(modelNoms.defaultImage)
+            Log.i("ViewHolderNoms", "Loading Image $imagePath")
+            Glide.with(view.context).load(imagePath).into(imageTest)
+        }
     }
 }

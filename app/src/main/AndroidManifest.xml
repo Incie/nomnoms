@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
           package="rolf.nomnoms.nomnoms">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+
 
     <application
-            android:allowBackup="true"
+            tools:ignore="GoogleAppIndexingWarning"
             android:label="@string/app_name"
             android:icon="@drawable/ai_launcher"
             android:roundIcon="@drawable/ai_launcher"
             android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:fullBackupContent="true"
+            android:allowBackup="true">
 
         <activity android:name=".ActivityNoms"/>
         <activity android:name=".ActivityNomsAdd"/>
@@ -24,6 +29,19 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+
+
+        <provider
+                android:name="android.support.v4.content.FileProvider"
+                android:authorities="com.example.android.fileprovider"
+                android:exported="false"
+                android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                       android:resource="@xml/file_paths"/>
+        </provider>
+
+
     </application>
 
 </manifest>

@@ -3,6 +3,8 @@ package rolf.nomnoms.nomnoms
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.util.Pair
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
@@ -10,6 +12,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import rolf.nomnoms.nomnoms.adapter.AdapterNoms
 import rolf.nomnoms.nomnoms.adapter.AdapterNomsEvent
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
@@ -41,7 +44,7 @@ class ActivityNoms : AppCompatActivity() {
         startActivityForResult(Intent(this, ActivityNomsAdd::class.java), 666)
     }
 
-    private fun onNomEvent(event: AdapterNomsEvent, itemId: Long) {
+    private fun onNomEvent(event: AdapterNomsEvent, itemId: Long, sharedView: Array<Pair<View,String>>?) {
         when( event ) {
             AdapterNomsEvent.NEW_EVENT_NOMS ->
                 startNewNomActivity()
@@ -63,7 +66,10 @@ class ActivityNoms : AppCompatActivity() {
             AdapterNomsEvent.VIEW_NOMS -> {
                 val intent = Intent(this@ActivityNoms, ActivityNomsView::class.java)
                 intent.putExtra("nom_id", itemId )
-                startActivity(intent)
+
+                val shared = sharedView!! as Array<Pair<View,String>>
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, *shared)
+                startActivityForResult(intent, 666, options.toBundle())
             }
             else -> {
             }
@@ -73,7 +79,7 @@ class ActivityNoms : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.main_navigation, menu)
-        return true;
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
