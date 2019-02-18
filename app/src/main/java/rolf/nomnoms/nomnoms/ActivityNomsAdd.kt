@@ -30,13 +30,14 @@ class ActivityNomsAdd : AppCompatActivity() {
         }
     }
 
-    fun getNom() : ModelNoms {
+    private fun getNom() : ModelNoms {
         return ModelNoms(
             -1,
             nomName!!.text.toString(),
             nomSubtitle!!.text.toString(),
             nomDescription!!.text.toString(),
-            0
+            0,
+            -1
         )
     }
 

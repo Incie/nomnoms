@@ -3,10 +3,13 @@ package rolf.nomnoms.nomnoms.adapter
 import android.app.DatePickerDialog
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.support.v4.util.Pair
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.ImageView
 import android.widget.Toast
 import rolf.nomnoms.nomnoms.R
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
@@ -18,29 +21,29 @@ import java.util.*
 class AdapterNoms (
     private val context: Context,
     items : List<ModelNoms>,
-    val NomEvent: (adapterNomEvent: AdapterNomsEvent, itemId: Long) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    val NomEvent: (adapterNomEvent: AdapterNomsEvent, itemId: Long, sharedView: Array<Pair<View,String>>?) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val nomItems = ArrayList<ModelNoms>()
 
     init {
         nomItems.addAll(items)
-        nomItems.add(ModelNoms(-1, "+", "", "", 0))
+        nomItems.add(ModelNoms(-1, "+", "", "", 0, -1))
     }
 
-    private fun onViewEvent(eventId: AdapterNomsEvent, adapterPosition: Int) {
+    private fun onViewEvent(eventId: AdapterNomsEvent, adapterPosition: Int, sharedView: Array<Pair<View,String>>?) {
         Log.i("AdapterNoms", "Event id = ${eventId.toString()}")
 
         val itemId = nomItems[adapterPosition].itemId;
 
         when {
             adapterPosition == nomItems.size-1 ->
-                NomEvent(AdapterNomsEvent.NEW_EVENT_NOMS, -1)
+                NomEvent(AdapterNomsEvent.NEW_EVENT_NOMS, -1, null)
             eventId == AdapterNomsEvent.NEW_EVENT_NOMS ->
                 dateEvent(adapterPosition)
             eventId == AdapterNomsEvent.DELETE_NOMS ->
-                NomEvent(eventId, itemId)
+                NomEvent(eventId, itemId, null)
             eventId == AdapterNomsEvent.VIEW_NOMS ->
-                NomEvent(eventId, itemId)
+                NomEvent(eventId, itemId, sharedView)
         }
     }
 
@@ -62,7 +65,7 @@ class AdapterNoms (
                     da.updateLatestNomDate(model.itemId, millis)
 
                     if( millis > model.latestDate ) {
-                        nomItems.set(adapterPosition, ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis) )
+                        nomItems.set(adapterPosition, ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis, -1) )
                         notifyItemChanged(adapterPosition)
                     }
                 },
@@ -72,15 +75,13 @@ class AdapterNoms (
             ).show()
     }
 
+    var imageCounter = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return ViewHolderNoms(
-            LayoutInflater.from(parent.context).inflate(
-                R.layout.listitem_noms,
-                parent,
-                false
-            ),
-            viewEvent = this::onViewEvent
-        )
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.listitem_noms, parent, false )
+        val image = view.findViewById<ImageView>(R.id.image_test)
+        image.transitionName = image.transitionName + "_$imageCounter++"
+
+        return ViewHolderNoms(view, viewEvent = this::onViewEvent)
     }
 
     override fun getItemCount(): Int {
