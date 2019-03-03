@@ -14,7 +14,7 @@ import rolf.nomnoms.nomnoms.R
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
 
 
-class AdapterGallery (val context: Context, val model : List<NomImageModel>, val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterGallery (val context: Context, val model : List<NomImageModel>, val showImageId: Int, private val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.listitem_gallery, parent, false )
@@ -31,7 +31,7 @@ class AdapterGallery (val context: Context, val model : List<NomImageModel>, val
 }
 
 class ViewHolderGalleryImage(private val view : View,  val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.ViewHolder(view) {
-    val imageView = view.imageView
+    private val imageView = view.imageView!!
 
     var imageModel : NomImageModel? = null
 

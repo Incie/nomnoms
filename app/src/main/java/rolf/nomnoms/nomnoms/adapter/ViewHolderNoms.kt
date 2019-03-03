@@ -17,7 +17,8 @@ enum class AdapterNomsEvent {
     DELETE_NOMS,
     EDIT_NOMS,
     NEW_EVENT_NOMS,
-    VIEW_NOMS
+    VIEW_NOMS,
+    OPEN_GALLERY
 }
 
 class ViewHolderNoms(private val view: View, val viewEvent: (eventId: AdapterNomsEvent, itemId: Int, sharedView: Array<Pair<View,String>>?) -> Unit ) : RecyclerView.ViewHolder(view) {
@@ -34,6 +35,14 @@ class ViewHolderNoms(private val view: View, val viewEvent: (eventId: AdapterNom
         view.setOnClickListener(this::onRowClick)
         view.setOnLongClickListener(this::onRowLongClick)
         imageTest.setOnClickListener(this::onImageClick)
+        imageTest.setOnLongClickListener(this::onImageLongClick)
+    }
+
+    private fun onImageLongClick(V: View?):Boolean {
+        Log.i("NomsViewHolder", "Open_Gallery $adapterPosition")
+        val list : Array<Pair<View,String>> = arrayOf(Pair<View,String>(imageTest, imageTest.transitionName) )
+        viewEvent(AdapterNomsEvent.OPEN_GALLERY, adapterPosition, list)
+        return true
     }
 
     private fun onRowLongClick(v: View?):Boolean{
@@ -45,7 +54,7 @@ class ViewHolderNoms(private val view: View, val viewEvent: (eventId: AdapterNom
     private fun onRowClick(v: View?){
         Log.i("NomsViewHolder", "View $adapterPosition - $model.name")
 
-        val list : Array<Pair<View,String>> = arrayOf(Pair<View,String>(view, "nom_panel"), Pair<View,String>(imageTest, imageTest.transitionName) )
+        val list : Array<Pair<View,String>> = arrayOf(Pair(view, "nom_panel"), Pair<View,String>(imageTest, imageTest.transitionName) )
         viewEvent(AdapterNomsEvent.VIEW_NOMS, adapterPosition, list)
     }
 

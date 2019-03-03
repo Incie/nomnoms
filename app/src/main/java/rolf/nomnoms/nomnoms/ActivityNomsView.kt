@@ -4,37 +4,37 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v4.content.FileProvider
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
-import rolf.nomnoms.nomnoms.R.id.gallery
+import kotlinx.android.synthetic.main.activity_noms_view.*
+import kotlinx.coroutines.*
 import rolf.nomnoms.nomnoms.adapter.AdapterNomEvents
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
+import rolf.nomnoms.nomnoms.model.ModelNomEvent
 import rolf.nomnoms.nomnoms.model.ModelNoms
 import java.io.File
 import java.io.IOException
 import java.nio.file.Paths
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.coroutines.CoroutineContext
 
-class ActivityNomsView : AppCompatActivity() {
+class ActivityNomsView : AppCompatActivity(), CoroutineScope {
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + SupervisorJob()
 
     private var nomId = -1L
-    private var galleryImage : ImageView? = null
 
-    private var model: ModelNoms? = null
+    private lateinit var model: ModelNoms
     private var mCurrentPhotoPath: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,38 +48,62 @@ class ActivityNomsView : AppCompatActivity() {
             return
         }
 
-        model = DataAccess(this).getNomById(nomId)!!
-
-        if( model == null ){
-            finish()
-            return
-        }
-
-        findViewById<TextView>(R.id.textview_name).text = model!!.name
-        findViewById<TextView>(R.id.textview_subtitle_nom).text = model!!.subtitle
-        findViewById<TextView>(R.id.textview_description_noms).text = model!!.description
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_events)
 
-        val nomEvents = DataAccess(this).getEventsByNomId(nomId)
-        recyclerView.adapter = AdapterNomEvents(this, nomEvents.reversed() )
         recyclerView.layoutManager = LinearLayoutManager(this)
-
         recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-        findViewById<Button>(R.id.camera).setOnClickListener { startCamera() }
+        camera.setOnClickListener { startCamera() }
 
-        galleryImage = findViewById(R.id.gallery)
+        gallery!!.setOnClickListener(this::onGalleryImageClick)
+    }
 
-        galleryImage!!.setOnClickListener {
-            val intent = Intent(this@ActivityNomsView, ActivityGallery::class.java)
-            intent.putExtra("nom_id", model!!.itemId)
-            startActivityForResult(intent, 665)
+    override fun onStart(){
+        super.onStart()
+        setupData()
+    }
+
+    private fun setupData(){
+        this.launch {
+            Log.e("Error", "Error?")
+            var imagePath:String? = null
+            var nomEvents: List<ModelNomEvent>? = null;
+            val backgroundTask = async(Dispatchers.Default){
+                val dataAccess = DataAccess(this@ActivityNomsView )
+                model = dataAccess.getNomById(nomId)!!
+
+                nomEvents = dataAccess.getEventsByNomId(nomId)
+
+//                if( model == null ){
+//                    Toast.makeText(this@ActivityNomsView, "Could not find nom by id $nomId", Toast.LENGTH_SHORT).show()
+//                    finish()
+//                }
+
+                if( model.defaultImage >= 0 )
+                    imagePath = dataAccess.getImagePathById(model.defaultImage)
+            }
+
+            backgroundTask.await()
+
+            recyclerview_events.adapter = AdapterNomEvents(this@ActivityNomsView, nomEvents!!.reversed() )
+            textview_name.text = model.name
+            textview_subtitle.text = model.subtitle
+            textview_description_noms.text = model.description
+
+            if( imagePath != null )
+                Glide.with(this@ActivityNomsView).load(imagePath).into(gallery!!)
         }
+    }
 
-        if( model!!.defaultImage >= 0 ) {
-            val imagePath = DataAccess(this).getImagePathById(model!!.defaultImage)
-            Glide.with(this).load(imagePath).into(galleryImage!!)
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineContext[Job]!!.cancel()
+    }
+
+    private fun onGalleryImageClick(view: View ){
+        val intent = Intent(this@ActivityNomsView, ActivityGallery::class.java)
+        intent.putExtra("nom_id", model!!.itemId)
+        startActivityForResult(intent, 665)
     }
 
     private fun startCamera(){
@@ -109,7 +133,7 @@ class ActivityNomsView : AppCompatActivity() {
 
             if( model?.defaultImage!! < 0 ) {
                 dataAccess.setDefaultImage(model!!.itemId.toInt(), imageId)
-                Glide.with(this).load(mCurrentPhotoPath).into(galleryImage!!)
+                Glide.with(this).load(mCurrentPhotoPath).into(gallery!!)
             }
         }
 

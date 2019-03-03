@@ -10,34 +10,46 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import rolf.nomnoms.nomnoms.adapter.AdapterGallery
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
+import rolf.nomnoms.nomnoms.model.NomImageModel
 
 class ActivityGallery : AppCompatActivity() {
+
+    private val _invalidId: Long = -1
+    private val galleryView: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nomsgallery)
 
-        val nomId = intent.getLongExtra("nom_id", -1).toInt()
+        val nomId = intent.getLongExtra("nom_id", _invalidId).toInt()
 
-        if( nomId == -1 ){
+        if( nomId == _invalidId.toInt() ){
             finish()
-            Toast.makeText(this, "nomId == -1", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "nomId == _invalidId $_invalidId", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val da = DataAccess(this)
-        val model = da.getNomById(nomId.toLong())
+        val dataAccess = DataAccess(this)
+        val nomModel = dataAccess.getNomById(nomId.toLong())!!
 
-        val imageList = da.getImagesForNomById(nomId)
+        title = nomModel.name
 
-        val galleryView = findViewById<ImageView>(R.id.image_present)
+        val imageList = dataAccess.getImagesForNomById(nomId)
+
+        val galleryView = findViewById<ImageView>(R.id.image_test)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_images)
         recyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        recyclerView!!.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
-        recyclerView!!.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-        recyclerView.adapter = AdapterGallery(this, imageList){
-            Glide.with(this).load(it.imagePath).into(galleryView)
+        recyclerView.adapter = AdapterGallery(this, imageList, nomModel.defaultImage, this::onImageSelect)
+
+        val image = imageList.find{ it.imageId == nomModel.defaultImage }
+        if( image != null ) {
+            Glide.with(this).load(image.imagePath).into(galleryView)
         }
+    }
+
+    private fun onImageSelect(image: NomImageModel){
+        Glide.with(this).load(image.imagePath).placeholder(R.drawable.ai_launcher).into(galleryView!!)
     }
 }

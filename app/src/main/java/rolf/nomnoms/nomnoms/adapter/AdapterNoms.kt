@@ -21,7 +21,7 @@ import java.util.*
 class AdapterNoms (
     private val context: Context,
     items : List<ModelNoms>,
-    val NomEvent: (adapterNomEvent: AdapterNomsEvent, itemId: Long, sharedView: Array<Pair<View,String>>?) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val NomEvent: (adapterNomEvent: AdapterNomsEvent, itemId: Long, sharedView: Array<Pair<View,String>>?) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val nomItems = ArrayList<ModelNoms>()
 
@@ -31,7 +31,7 @@ class AdapterNoms (
     }
 
     private fun onViewEvent(eventId: AdapterNomsEvent, adapterPosition: Int, sharedView: Array<Pair<View,String>>?) {
-        Log.i("AdapterNoms", "Event id = ${eventId.toString()}")
+        Log.i("AdapterNoms", "Event id = $eventId")
 
         val itemId = nomItems[adapterPosition].itemId;
 
@@ -43,6 +43,8 @@ class AdapterNoms (
             eventId == AdapterNomsEvent.DELETE_NOMS ->
                 NomEvent(eventId, itemId, null)
             eventId == AdapterNomsEvent.VIEW_NOMS ->
+                NomEvent(eventId, itemId, sharedView)
+            eventId == AdapterNomsEvent.OPEN_GALLERY ->
                 NomEvent(eventId, itemId, sharedView)
         }
     }
@@ -75,11 +77,11 @@ class AdapterNoms (
             ).show()
     }
 
-    var imageCounter = 0
+    private var imageTransitionName = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.listitem_noms, parent, false )
         val image = view.findViewById<ImageView>(R.id.image_test)
-        image.transitionName = image.transitionName + "_$imageCounter++"
+        image.transitionName = image.transitionName + "_$imageTransitionName++"
 
         return ViewHolderNoms(view, viewEvent = this::onViewEvent)
     }
@@ -97,7 +99,6 @@ class AdapterNoms (
             val list = nomItems.sortedWith(compareBy(ModelNoms::name))
             nomItems.clear()
             nomItems.addAll( list )
-
         }
 
         if( sortType == NomSort.Ascending ){

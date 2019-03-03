@@ -9,8 +9,8 @@ import java.io.File
 import java.nio.file.Paths
 
 object NomsDataAccessContract {
-    const val DATABASE_VERSION = 11
-    const val DATABASE_DEBUG_VERSION = 1
+    private const val DATABASE_VERSION = 11
+    private const val DATABASE_DEBUG_VERSION = 1
 
     const val useDebugDatabase = false
 
@@ -60,7 +60,7 @@ object NomsDataAccessContract {
             "t_noms.${FeedEntry.COLUMN_ID}, " +
             "t_noms.${FeedEntry.COLUMN_NAME_TITLE}, " +
             "t_noms.${FeedEntry.COLUMN_NAME_SUBTITLE}, " +
-            "t_noms.${FeedEntry.COLUMN_NAME_IMAGE_DEFAULT}" +
+            "t_noms.${FeedEntry.COLUMN_NAME_IMAGE_DEFAULT}, " +
             "t_event.${FeedEntry.COLUMN_NAME_DATE} FROM " +
             "${FeedEntry.TABLE_EVENT} t_event " +
             "INNER JOIN ${FeedEntry.TABLE_NOMS} t_noms " +

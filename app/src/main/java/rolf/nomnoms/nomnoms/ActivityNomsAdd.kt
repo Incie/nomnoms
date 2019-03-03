@@ -3,48 +3,44 @@ package rolf.nomnoms.nomnoms
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.android.synthetic.main.activity_noms_add.*
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
 import rolf.nomnoms.nomnoms.model.ModelNoms
 
 class ActivityNomsAdd : AppCompatActivity() {
 
-    var nomName : TextView? = null
-    var nomSubtitle : TextView? = null
-    var nomDescription : TextView? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms_add)
 
-        nomName = findViewById(R.id.textview_name)
-        nomSubtitle = findViewById(R.id.textview_subtitle_nom)
-        nomDescription = findViewById(R.id.textview_description_noms)
-        findViewById<Button>(R.id.button_abort).setOnClickListener {finish()}
+        findViewById<Button>(R.id.button_abort).setOnClickListener { finish() }
+        findViewById<Button>(R.id.button_save_and_add_more).setOnClickListener(this::saveNomAndAddMore)
+    }
 
-        findViewById<Button>(R.id.button_save_and_add_more).setOnClickListener {
-            saveNomToDb()
-            clearForm()
-        }
+    private fun saveNomAndAddMore(view: View){
+        saveNomToDb()
+        clearForm()
     }
 
     private fun getNom() : ModelNoms {
         return ModelNoms(
             -1,
-            nomName!!.text.toString(),
-            nomSubtitle!!.text.toString(),
-            nomDescription!!.text.toString(),
+            textview_name.text.toString(),
+            textview_subtitle.text.toString(),
+            textview_description_noms.text.toString(),
             0,
             -1
         )
     }
 
     private fun clearForm(){
-        nomName!!.text = ""
-        nomSubtitle!!.text = ""
-        nomDescription!!.text = ""
+        textview_name.setText("")
+        textview_subtitle_nom.setText("")
+        textview_description_noms.setText("")
     }
 
     private fun saveNomToDb(){
@@ -56,12 +52,12 @@ class ActivityNomsAdd : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if( nomName?.text?.equals("") == true ){
+        if(textview_name.text.isBlank()) {
             super.onBackPressed()
+            return
         }
 
-        if( !nomName!!.text.equals("") )
-            saveNomToDb()
-        finish();
+        saveNomToDb()
+        finish()
     }
 }

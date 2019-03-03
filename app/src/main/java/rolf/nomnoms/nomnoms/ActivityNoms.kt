@@ -8,11 +8,11 @@ import android.support.v4.util.Pair
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import kotlinx.android.synthetic.main.activity_noms.*
 import rolf.nomnoms.nomnoms.adapter.AdapterNoms
 import rolf.nomnoms.nomnoms.adapter.AdapterNomsEvent
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
@@ -20,16 +20,13 @@ import rolf.nomnoms.nomnoms.model.NomSort
 
 class ActivityNoms : AppCompatActivity() {
 
-    private var recyclerView : RecyclerView? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms)
 
-        recyclerView = findViewById(R.id.list_noms)
-        recyclerView!!.layoutManager = LinearLayoutManager(this)
-        recyclerView!!.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
-        recyclerView!!.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        list_noms.layoutManager = LinearLayoutManager(this)
+        list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
+        list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         refreshAdapter()
     }
@@ -37,7 +34,7 @@ class ActivityNoms : AppCompatActivity() {
     private fun refreshAdapter(){
         val allNoms = DataAccess(this).getAll()
         val adapter = AdapterNoms(this, allNoms, this::onNomEvent)
-        recyclerView!!.adapter = adapter
+        list_noms!!.adapter = adapter
     }
 
     private fun startNewNomActivity(){
@@ -50,13 +47,16 @@ class ActivityNoms : AppCompatActivity() {
                 startNewNomActivity()
 
             AdapterNomsEvent.DELETE_NOMS -> {
-                val builder = AlertDialog.Builder(this)
-                builder.setTitle("Delete?")
-                builder.setPositiveButton("YES") { _, _ ->
+                val builder = AlertDialog.Builder(this, R.style.AlertDialogTheme)
+
+                val nom = DataAccess(this).getNomById(itemId)!!
+
+                builder.setTitle("Delete '${nom.name}'?")
+                builder.setNeutralButton("DELETE") { _, _ ->
 
                     DataAccess(this).deleteNomById(itemId)
                     refreshAdapter()
-                    //get id from somewhere
+                    //todo: get id from somewhere
                     //update recyclerview
                 }
 
@@ -67,11 +67,21 @@ class ActivityNoms : AppCompatActivity() {
                 val intent = Intent(this@ActivityNoms, ActivityNomsView::class.java)
                 intent.putExtra("nom_id", itemId )
 
-                val shared = sharedView!! as Array<Pair<View,String>>
+                val shared = sharedView!!
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, *shared)
                 startActivityForResult(intent, 666, options.toBundle())
             }
+
+            AdapterNomsEvent.OPEN_GALLERY -> {
+                val intent = Intent(this@ActivityNoms, ActivityGallery::class.java)
+                intent.putExtra("nom_id", itemId)
+
+                val shared = sharedView!!
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, *shared)
+                startActivityForResult(intent, 665, options.toBundle())
+            }
             else -> {
+                throw Exception("Unknown eventId in onNomEvent $itemId")
             }
         }
     }
@@ -96,17 +106,17 @@ class ActivityNoms : AppCompatActivity() {
         }
 
         if( item.itemId == R.id.menu_nom_sort_alphabetical ){
-            (recyclerView?.adapter as AdapterNoms).sort( NomSort.Alphabetical )
+            (list_noms.adapter as AdapterNoms).sort( NomSort.Alphabetical )
             return true
         }
 
         if( item.itemId == R.id.menu_nom_sort_ascending ){
-            (recyclerView?.adapter as AdapterNoms).sort( NomSort.Ascending )
+            (list_noms.adapter as AdapterNoms).sort( NomSort.Ascending )
             return true
         }
 
         if( item.itemId == R.id.menu_nom_sort_descending ){
-            (recyclerView?.adapter as AdapterNoms).sort( NomSort.Descending )
+            (list_noms.adapter as AdapterNoms).sort( NomSort.Descending )
             return true
         }
 

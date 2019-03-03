@@ -8,34 +8,34 @@
         android:layout_height="86dp">
 
     <TextView
-            tools:text="FoodyNomsHere"
+            android:id="@+id/text_nom_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/text_nom_title"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintTop_toTopOf="parent"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textAllCaps="false"
             android:layout_marginEnd="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            tools:text="FoodyNomsHere"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/image_test"
             app:layout_constraintHorizontal_bias="0.0"/>
 
     <ImageView
+            android:id="@+id/image_test"
             android:layout_width="56dp"
             android:layout_height="56dp"
             tools:srcCompat="@drawable/ai_launcher"
-            android:id="@+id/image_test"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/content_description_image"
+            android:transitionName="nom_image"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="image"
-            android:transitionName="nom_image"
             app:srcCompat="@drawable/ai_launcher"/>
 
     <TextView
