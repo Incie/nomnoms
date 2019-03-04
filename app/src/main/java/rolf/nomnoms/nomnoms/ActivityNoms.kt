@@ -1,5 +1,7 @@
 package rolf.nomnoms.nomnoms
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_noms.*
 import rolf.nomnoms.nomnoms.adapter.AdapterNoms
 import rolf.nomnoms.nomnoms.adapter.AdapterNomsEvent
@@ -28,13 +31,16 @@ class ActivityNoms : AppCompatActivity() {
         list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
         list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
-        refreshAdapter()
+        if( savedInstanceState == null )
+            refreshAdapter()
     }
 
     private fun refreshAdapter(){
         val allNoms = DataAccess(this).getAll()
         val adapter = AdapterNoms(this, allNoms, this::onNomEvent)
         list_noms!!.adapter = adapter
+
+        ViewModelProviders.of(this@ActivityNoms).get()
     }
 
     private fun startNewNomActivity(){
@@ -87,8 +93,7 @@ class ActivityNoms : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.main_navigation, menu)
+        menuInflater.inflate(R.menu.main_navigation, menu)
         return true
     }
 
