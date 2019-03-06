@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#270094</color>
     <color name="colorPrimaryDark">#8A270094</color>
-    <color name="colorAccent">#d81b60</color>
+    <color name="colorAccent">#D81B60</color>
 
     <color name="ic_nom_launcherbackground">#270094</color>
 </resources>

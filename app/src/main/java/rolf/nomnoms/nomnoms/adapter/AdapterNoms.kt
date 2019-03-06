@@ -2,6 +2,7 @@ package rolf.nomnoms.nomnoms.adapter
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Color
 import android.support.v7.widget.RecyclerView
 import android.support.v4.util.Pair
 import android.util.Log
@@ -53,7 +54,7 @@ class AdapterNoms (
         val model = nomItems[adapterPosition]
 
         val calendar = Calendar.getInstance()
-        DatePickerDialog(context,
+        val dpd = DatePickerDialog(context,
             { _: DatePicker, year: Int, month: Int, day: Int ->
                     val cal = Calendar.getInstance()
                     cal.set(Calendar.YEAR, year)
@@ -61,20 +62,23 @@ class AdapterNoms (
                     cal.set(Calendar.DAY_OF_MONTH, day)
                     val millis = cal.timeInMillis
 
-                    Toast.makeText(context, millis.toString(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Added new event for '${model.name}'", Toast.LENGTH_SHORT).show()
                     val da = DataAccess(context)
                     da.insertNomEvent(ModelNomEvent(-1, model.itemId, millis) )
                     da.updateLatestNomDate(model.itemId, millis)
 
                     if( millis > model.latestDate ) {
-                        nomItems.set(adapterPosition, ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis, -1) )
+                        nomItems[adapterPosition] = ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis, -1)
                         notifyItemChanged(adapterPosition)
                     }
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            )
+        dpd.show()
+        dpd.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+        dpd.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE)
     }
 
     private var imageTransitionName = 0

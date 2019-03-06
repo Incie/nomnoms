@@ -30,7 +30,7 @@ class ActivityNomsAdd : AppCompatActivity() {
         return ModelNoms(
             -1,
             textview_name.text.toString(),
-            textview_subtitle.text.toString(),
+            textview_subtitle_nom.text.toString(),
             textview_description_noms.text.toString(),
             0,
             -1

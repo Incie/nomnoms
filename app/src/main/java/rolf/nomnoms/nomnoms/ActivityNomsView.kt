@@ -65,7 +65,6 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
     private fun setupData(){
         this.launch {
-            Log.e("Error", "Error?")
             var imagePath:String? = null
             var nomEvents: List<ModelNomEvent>? = null;
             val backgroundTask = async(Dispatchers.Default){
@@ -87,7 +86,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
             recyclerview_events.adapter = AdapterNomEvents(this@ActivityNomsView, nomEvents!!.reversed() )
             textview_name.text = model.name
-            textview_subtitle.text = model.subtitle
+            textview_subtitle_nom.text = model.subtitle
             textview_description_noms.text = model.description
 
             if( imagePath != null )
