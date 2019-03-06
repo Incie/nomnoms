@@ -26,17 +26,23 @@ class AdapterNoms (
 
     private val nomItems = ArrayList<ModelNoms>()
 
+    fun setNoms(newNoms: List<ModelNoms>){
+        nomItems.clear()
+        nomItems.addAll(newNoms)
+        notifyDataSetChanged()
+    }
+
     init {
-        nomItems.addAll(items)
-        nomItems.add(ModelNoms(-1, "+", "", "", 0, -1))
+        setNoms(items)
     }
 
     private fun onViewEvent(eventId: AdapterNomsEvent, adapterPosition: Int, sharedView: Array<Pair<View,String>>?) {
         Log.i("AdapterNoms", "Event id = $eventId")
 
-        val itemId = nomItems[adapterPosition].itemId;
+        val itemId = nomItems[adapterPosition].itemId
 
         when {
+            //TODO: NEW_EVENT_NOMS REUSED? INSTEAD OF something like NEW_NOMS
             adapterPosition == nomItems.size-1 ->
                 NomEvent(AdapterNomsEvent.NEW_EVENT_NOMS, -1, null)
             eventId == AdapterNomsEvent.NEW_EVENT_NOMS ->

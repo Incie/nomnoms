@@ -1,6 +1,5 @@
 package rolf.nomnoms.nomnoms
 
-
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -10,7 +9,6 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_noms.*
@@ -25,17 +23,21 @@ class ActivityNoms : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms)
 
-        list_noms.layoutManager = LinearLayoutManager(this)
-        list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL))
         list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        list_noms.layoutManager = LinearLayoutManager(this)
 
         refreshAdapter()
     }
 
     private fun refreshAdapter(){
         val allNoms = DataAccess(this).getAll()
-        val adapter = AdapterNoms(this, allNoms, this::onNomEvent)
-        list_noms!!.adapter = adapter
+
+        if( list_noms.adapter == null ) {
+            val adapter = AdapterNoms(this, allNoms, this::onNomEvent)
+            list_noms!!.adapter = adapter
+        } else {
+            (list_noms!!.adapter as AdapterNoms).setNoms(allNoms)
+        }
     }
 
     private fun startNewNomActivity(){
@@ -88,8 +90,7 @@ class ActivityNoms : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater: MenuInflater = menuInflater
-        inflater.inflate(R.menu.main_navigation, menu)
+        menuInflater.inflate(R.menu.main_navigation, menu)
         return true
     }
 
