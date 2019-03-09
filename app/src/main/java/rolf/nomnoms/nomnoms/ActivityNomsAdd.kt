@@ -17,8 +17,12 @@ class ActivityNomsAdd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms_add)
 
-        findViewById<Button>(R.id.button_abort).setOnClickListener { finish() }
-        findViewById<Button>(R.id.button_save_and_add_more).setOnClickListener(this::saveNomAndAddMore)
+        button_abort.setOnClickListener { finish() }
+        button_save_and_add_more.setOnClickListener(this::saveNomAndAddMore)
+        button_add.setOnClickListener {
+            saveNomToDb()
+            finish()
+        }
     }
 
     private fun saveNomAndAddMore(view: View){
