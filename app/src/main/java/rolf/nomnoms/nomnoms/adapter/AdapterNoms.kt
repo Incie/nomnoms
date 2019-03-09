@@ -9,11 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.Toast
 import rolf.nomnoms.nomnoms.R
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
+import rolf.nomnoms.nomnoms.model.Epoch
 import rolf.nomnoms.nomnoms.model.ModelNomEvent
 import rolf.nomnoms.nomnoms.model.ModelNoms
 import rolf.nomnoms.nomnoms.model.NomSort
@@ -24,15 +24,18 @@ class AdapterNoms (
     items : List<ModelNoms>,
     private val NomEvent: (adapterNomEvent: AdapterNomsEvent, itemId: Long, sharedView: Array<Pair<View,String>>?) -> Unit ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private lateinit var currentSortingType : NomSort
     private val nomItems = ArrayList<ModelNoms>()
 
     fun setNoms(newNoms: List<ModelNoms>){
         nomItems.clear()
         nomItems.addAll(newNoms)
+        sort(currentSortingType)
         notifyDataSetChanged()
     }
 
     init {
+        currentSortingType = NomSort.Alphabetical
         setNoms(items)
     }
 
@@ -57,34 +60,34 @@ class AdapterNoms (
     }
 
     private fun dateEvent(adapterPosition: Int){
-        val model = nomItems[adapterPosition]
 
         val calendar = Calendar.getInstance()
-        val dpd = DatePickerDialog(context,
-            { _: DatePicker, year: Int, month: Int, day: Int ->
-                    val cal = Calendar.getInstance()
-                    cal.set(Calendar.YEAR, year)
-                    cal.set(Calendar.MONTH, month)
-                    cal.set(Calendar.DAY_OF_MONTH, day)
-                    val millis = cal.timeInMillis
+        val datePicker = DatePickerDialog(context,
+            {_, y,m,d -> onDateSelect(y, m, d, adapterPosition)},
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH) )
 
-                    Toast.makeText(context, "Added new event for '${model.name}'", Toast.LENGTH_SHORT).show()
-                    val da = DataAccess(context)
-                    da.insertNomEvent(ModelNomEvent(-1, model.itemId, millis) )
-                    da.updateLatestNomDate(model.itemId, millis)
+        datePicker.show()
+        datePicker.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+        datePicker.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE)
+    }
 
-                    if( millis > model.latestDate ) {
-                        nomItems[adapterPosition] = ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis, -1)
-                        notifyItemChanged(adapterPosition)
-                    }
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-            )
-        dpd.show()
-        dpd.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
-        dpd.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(Color.BLUE)
+    private fun onDateSelect(year: Int, month: Int, day: Int, adapterPosition: Int){
+        val millis = Epoch.getEpochFrom(year, month, day)
+
+
+        val model = nomItems[adapterPosition]
+        Toast.makeText(context, "Added new event for '${model.name}'", Toast.LENGTH_SHORT).show()
+
+        val dataAccess = DataAccess(context)
+        dataAccess.insertNomEvent(ModelNomEvent(-1, model.itemId, millis) )
+        dataAccess.updateLatestNomDate(model.itemId, millis)
+
+        if( millis > model.latestDate ) {
+            nomItems[adapterPosition] = ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis, model.defaultImage)
+            notifyItemChanged(adapterPosition)
+        }
     }
 
     private var imageTransitionName = 0
@@ -124,6 +127,7 @@ class AdapterNoms (
             nomItems.reverse()
         }
 
+        currentSortingType = sortType
         notifyDataSetChanged()
     }
 }

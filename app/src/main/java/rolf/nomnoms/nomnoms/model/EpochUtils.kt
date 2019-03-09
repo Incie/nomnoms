@@ -7,6 +7,15 @@ import java.util.*
 class Epoch {
 
     companion object {
+
+        fun getEpochFrom(year: Int, month: Int, day: Int):Long {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+            return calendar.timeInMillis
+        }
+
         fun getSpan(epoch: Long):String {
             val calendar = Calendar.getInstance()
 
@@ -16,19 +25,19 @@ class Epoch {
 
             val weeksSinceLast = daysSinceLast / 7;
 
-            if( weeksSinceLast > 0 )
-                return "${weeksSinceLast}w ${(daysSinceLast % 7)}d"
+            return if( weeksSinceLast > 0 )
+                "${weeksSinceLast}w ${(daysSinceLast % 7)}d"
             else
-                return "${daysSinceLast}d"
+                "${daysSinceLast}d"
         }
 
         fun epochToDate(epoch:Long):String{
-            try {
+            return try {
                 val sdf = SimpleDateFormat("MM/dd/yyyy")
                 val netDate = Date(epoch)
-                return sdf.format(netDate)
+                sdf.format(netDate)
             } catch (e: Exception) {
-                return e.toString()
+                e.toString()
             }
         }
 
@@ -41,10 +50,10 @@ class Epoch {
 
             val weeksSinceLast = daysSinceLast / 7;
 
-            if( weeksSinceLast > 0 )
-                return "${weeksSinceLast}w ${(daysSinceLast % 7)}d"
+            return if( weeksSinceLast > 0 )
+                "${weeksSinceLast}w ${(daysSinceLast % 7)}d"
             else
-                return "${daysSinceLast}d"
+                "${daysSinceLast}d"
         }
     }
 }

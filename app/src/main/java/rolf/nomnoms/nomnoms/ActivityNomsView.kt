@@ -101,7 +101,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
     private fun onGalleryImageClick(view: View ){
         val intent = Intent(this@ActivityNomsView, ActivityGallery::class.java)
-        intent.putExtra("nom_id", model!!.itemId)
+        intent.putExtra("nom_id", model.itemId)
         startActivityForResult(intent, 665)
     }
 
@@ -128,10 +128,10 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
             Log.e("Photo", "$mCurrentPhotoPath resultCode: $resultCode ${Activity.RESULT_OK} = OK")
 
             val dataAccess = DataAccess(this)
-            val imageId = dataAccess.insertImage(mCurrentPhotoPath, model!!.itemId.toInt() )
+            val imageId = dataAccess.insertImage(mCurrentPhotoPath, model.itemId.toInt() )
 
-            if( model?.defaultImage!! < 0 ) {
-                dataAccess.setDefaultImage(model!!.itemId.toInt(), imageId)
+            if( model.defaultImage < 0 ) {
+                dataAccess.setDefaultImage(model.itemId.toInt(), imageId)
                 Glide.with(this).load(mCurrentPhotoPath).into(gallery!!)
             }
         }
