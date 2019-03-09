@@ -1,17 +1,14 @@
 package rolf.nomnoms.nomnoms.adapter
 
 import android.content.Context
-import android.support.v4.util.Pair
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import com.bumptech.glide.Glide
 import rolf.nomnoms.nomnoms.model.NomImageModel
 import kotlinx.android.synthetic.main.listitem_gallery.view.*
 import rolf.nomnoms.nomnoms.R
-import rolf.nomnoms.nomnoms.dataaccess.DataAccess
 
 
 class AdapterGallery (val context: Context, val model : List<NomImageModel>, val showImageId: Int, private val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -33,16 +30,18 @@ class AdapterGallery (val context: Context, val model : List<NomImageModel>, val
 class ViewHolderGalleryImage(private val view : View,  val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.ViewHolder(view) {
     private val imageView = view.imageView!!
 
-    var imageModel : NomImageModel? = null
+    private lateinit var imageModel : NomImageModel
 
     init {
         view.setOnClickListener{
-            imageEvent(imageModel!!)
+            imageEvent(imageModel)
         }
     }
 
-    fun bind(nim : NomImageModel){
-        imageModel = nim
-        Glide.with(view.context).load(nim.imagePath).into(imageView)
+    fun bind(nomImageModel : NomImageModel){
+        imageModel = nomImageModel
+        Glide.with(view.context)
+            .load(imageModel.imagePath)
+            .into(imageView)
     }
 }

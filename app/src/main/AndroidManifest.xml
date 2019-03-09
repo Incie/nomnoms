@@ -21,7 +21,8 @@
             android:allowBackup="true">
 
         <activity android:name=".ActivityNoms"/>
-        <activity android:name=".ActivityNomsAdd"/>
+        <activity android:name=".ActivityNomsAdd"
+                  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ActivityGallery"/>
         <activity android:name=".ActivityNomsView"/>
         <activity android:name=".ActivityNomEvents"/>

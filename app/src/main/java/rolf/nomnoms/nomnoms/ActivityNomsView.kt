@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_noms_view.*
 import kotlinx.coroutines.*
@@ -65,19 +66,20 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
     private fun setupData(){
         this.launch {
-            Log.e("Error", "Error?")
             var imagePath:String? = null
             var nomEvents: List<ModelNomEvent>? = null;
             val backgroundTask = async(Dispatchers.Default){
                 val dataAccess = DataAccess(this@ActivityNomsView )
-                model = dataAccess.getNomById(nomId)!!
+                val modelNoms = dataAccess.getNomById(nomId)
+
+                if( modelNoms == null ){
+                    Toast.makeText(this@ActivityNomsView, "Could not find nom by id $nomId", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
+                model = modelNoms!!
 
                 nomEvents = dataAccess.getEventsByNomId(nomId)
-
-//                if( model == null ){
-//                    Toast.makeText(this@ActivityNomsView, "Could not find nom by id $nomId", Toast.LENGTH_SHORT).show()
-//                    finish()
-//                }
 
                 if( model.defaultImage >= 0 )
                     imagePath = dataAccess.getImagePathById(model.defaultImage)
@@ -87,7 +89,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
             recyclerview_events.adapter = AdapterNomEvents(this@ActivityNomsView, nomEvents!!.reversed() )
             textview_name.text = model.name
-            textview_subtitle.text = model.subtitle
+            textview_subtitle_nom.text = model.subtitle
             textview_description_noms.text = model.description
 
             if( imagePath != null )
@@ -102,7 +104,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
     private fun onGalleryImageClick(view: View ){
         val intent = Intent(this@ActivityNomsView, ActivityGallery::class.java)
-        intent.putExtra("nom_id", model!!.itemId)
+        intent.putExtra("nom_id", model.itemId)
         startActivityForResult(intent, 665)
     }
 
@@ -129,10 +131,10 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
             Log.e("Photo", "$mCurrentPhotoPath resultCode: $resultCode ${Activity.RESULT_OK} = OK")
 
             val dataAccess = DataAccess(this)
-            val imageId = dataAccess.insertImage(mCurrentPhotoPath, model!!.itemId.toInt() )
+            val imageId = dataAccess.insertImage(mCurrentPhotoPath, model.itemId.toInt() )
 
-            if( model?.defaultImage!! < 0 ) {
-                dataAccess.setDefaultImage(model!!.itemId.toInt(), imageId)
+            if( model.defaultImage < 0 ) {
+                dataAccess.setDefaultImage(model.itemId.toInt(), imageId)
                 Glide.with(this).load(mCurrentPhotoPath).into(gallery!!)
             }
         }

@@ -17,8 +17,12 @@ class ActivityNomsAdd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms_add)
 
-        findViewById<Button>(R.id.button_abort).setOnClickListener { finish() }
-        findViewById<Button>(R.id.button_save_and_add_more).setOnClickListener(this::saveNomAndAddMore)
+        button_abort.setOnClickListener { finish() }
+        button_save_and_add_more.setOnClickListener(this::saveNomAndAddMore)
+        button_add.setOnClickListener {
+            saveNomToDb()
+            finish()
+        }
     }
 
     private fun saveNomAndAddMore(view: View){
@@ -30,7 +34,7 @@ class ActivityNomsAdd : AppCompatActivity() {
         return ModelNoms(
             -1,
             textview_name.text.toString(),
-            textview_subtitle.text.toString(),
+            textview_subtitle_nom.text.toString(),
             textview_description_noms.text.toString(),
             0,
             -1
