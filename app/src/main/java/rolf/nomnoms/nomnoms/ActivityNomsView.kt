@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_noms_view.*
 import kotlinx.coroutines.*
@@ -69,14 +70,16 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
             var nomEvents: List<ModelNomEvent>? = null;
             val backgroundTask = async(Dispatchers.Default){
                 val dataAccess = DataAccess(this@ActivityNomsView )
-                model = dataAccess.getNomById(nomId)!!
+                val modelNoms = dataAccess.getNomById(nomId)
+
+                if( modelNoms == null ){
+                    Toast.makeText(this@ActivityNomsView, "Could not find nom by id $nomId", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+
+                model = modelNoms!!
 
                 nomEvents = dataAccess.getEventsByNomId(nomId)
-
-//                if( model == null ){
-//                    Toast.makeText(this@ActivityNomsView, "Could not find nom by id $nomId", Toast.LENGTH_SHORT).show()
-//                    finish()
-//                }
 
                 if( model.defaultImage >= 0 )
                     imagePath = dataAccess.getImagePathById(model.defaultImage)

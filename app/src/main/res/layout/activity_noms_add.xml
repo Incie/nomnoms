@@ -10,7 +10,7 @@
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:ems="10"
             android:id="@+id/textview_name"
             android:layout_marginStart="16dp"
@@ -73,7 +73,7 @@
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:ems="10"
             android:id="@+id/textview_subtitle_nom"
             android:layout_marginTop="8dp"
@@ -85,7 +85,7 @@
     <EditText
             android:layout_width="0dp"
             android:layout_height="120dp"
-            android:inputType="textMultiLine"
+            android:inputType="textMultiLine|textCapSentences"
             android:ems="10"
             android:id="@+id/textview_description_noms"
             app:layout_constraintEnd_toEndOf="parent"
