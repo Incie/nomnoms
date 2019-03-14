@@ -1,4 +1,5 @@
 # nomnoms
 
 Todo:
-- image gallery
+- set default image from gallery
+-

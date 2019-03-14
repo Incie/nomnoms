@@ -114,6 +114,8 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
                 val photoFile: File? = try {
                     createImageFile()
                 } catch (ex: IOException) {
+                    Log.e("ActivityNomsView", "$ex")
+                    Toast.makeText(this, "${ex.message}", Toast.LENGTH_SHORT).show()
                     null
                 }
 
@@ -127,7 +129,14 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if( requestCode == 1) {
+        if( requestCode == 1 ) {
+            if( resultCode != Activity.RESULT_OK ){
+                Toast.makeText(this, "No Image Returned from Camera", Toast.LENGTH_SHORT).show()
+                deleteFile(mCurrentPhotoPath)
+                Log.i("Photo", "Deleted $mCurrentPhotoPath")
+                return
+            }
+
             Log.e("Photo", "$mCurrentPhotoPath resultCode: $resultCode ${Activity.RESULT_OK} = OK")
 
             val dataAccess = DataAccess(this)
@@ -148,6 +157,11 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val rootPath = Environment.getExternalStorageDirectory().toString()
         val path = Paths.get(rootPath,"nomnoms/images").toFile()
+
+        if( !path.exists() ) {
+            path.mkdir()
+            Log.i("ActivityNomsView", "Created path $path")
+        }
 
         return File.createTempFile("JPEG_${timeStamp}_", ".jpg", path).apply { mCurrentPhotoPath = absolutePath }
     }
