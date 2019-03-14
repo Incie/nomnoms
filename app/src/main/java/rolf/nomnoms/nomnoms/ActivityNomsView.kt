@@ -49,14 +49,16 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
             return
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_events)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
-        camera.setOnClickListener { startCamera() }
+        recyclerview_events.layoutManager = LinearLayoutManager(this)
+        recyclerview_events.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         gallery!!.setOnClickListener(this::onGalleryImageClick)
+        camera.setOnClickListener { startCamera() }
+        button_edit.setOnClickListener {
+            val intent = Intent(this@ActivityNomsView, ActivityNomsEdit::class.java)
+            intent.putExtra("nom_id", model.itemId)
+            startActivityForResult(intent, 664)
+        }
     }
 
     override fun onStart(){
@@ -67,7 +69,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
     private fun setupData(){
         this.launch {
             var imagePath:String? = null
-            var nomEvents: List<ModelNomEvent>? = null;
+            var nomEvents: List<ModelNomEvent>? = null
             val backgroundTask = async(Dispatchers.Default){
                 val dataAccess = DataAccess(this@ActivityNomsView )
                 val modelNoms = dataAccess.getNomById(nomId)

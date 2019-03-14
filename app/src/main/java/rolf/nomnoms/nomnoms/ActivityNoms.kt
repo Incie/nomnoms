@@ -1,7 +1,5 @@
 package rolf.nomnoms.nomnoms
 
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +11,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_noms.*
 import rolf.nomnoms.nomnoms.adapter.AdapterNoms
 import rolf.nomnoms.nomnoms.adapter.AdapterNomsEvent
@@ -36,12 +33,10 @@ class ActivityNoms : AppCompatActivity() {
     private fun refreshAdapter(){
         val allNoms = DataAccess(this).getAll()
 
-        if( list_noms.adapter == null ) {
-            val adapter = AdapterNoms(this, allNoms, this::onNomEvent)
-            list_noms!!.adapter = adapter
-        } else {
+        if( list_noms.adapter == null )
+            list_noms!!.adapter = AdapterNoms(this, allNoms, this::onNomEvent)
+        else
             (list_noms!!.adapter as AdapterNoms).setNoms(allNoms)
-        }
     }
 
     private fun startNewNomActivity(){
@@ -63,8 +58,8 @@ class ActivityNoms : AppCompatActivity() {
 
                     DataAccess(this).deleteNomById(itemId)
                     refreshAdapter()
-                    //todo: get id from somewhere
-                    //update recyclerview
+                    //todo: getNoms id from somewhere
+                    //update single row of recyclerview instead of full refresh
                 }
 
                 builder.show()
