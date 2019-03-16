@@ -4,7 +4,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:transitionName="nom_panel">
 
     <include layout="@layout/common_nom_input"
              android:layout_width="0dp"
@@ -20,8 +21,8 @@
             android:id="@+id/button_save"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_cancel"
-            android:layout_marginStart="16dp"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"/>
     <Button
             android:text="Cancel"
             android:layout_width="wrap_content"
@@ -30,7 +31,7 @@
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@color/colorAccent"
-            android:layout_marginStart="16dp"
-            app:layout_constraintStart_toStartOf="parent"/>
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/button_save"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -13,32 +13,32 @@ import rolf.nomnoms.nomnoms.model.ModelNoms
 
 
 class NomViewModel(app: Application) : AndroidViewModel(app) {
-    val model = MutableLiveData<ModelNoms>()
-    var da : DataAccess = DataAccess(app)
+    private val liveDataNom = MutableLiveData<ModelNoms>()
+    private val dataAccess : DataAccess = DataAccess(app)
 
     private var modelId : Long? = null
 
-    fun setModelId(modelId: Long) { this.modelId = modelId}
+    fun setModelId(modelId: Long)
+    {
+        this.modelId = modelId
+    }
 
     fun getNoms() : MutableLiveData<ModelNoms> {
-        if( model.value == null ){
-            val dbModel = da.getNomById(modelId!!)
-            model.value = dbModel
-            Thread.sleep(5000)
-//            model.value = ModelNoms(1, "namae wa", "mou", "shindeiru", 0, -1)
+        if( liveDataNom.value == null ){
+            val dbModel = dataAccess.getNomById(modelId!!)
+            liveDataNom.value = dbModel
         }
 
-        return model
+        return liveDataNom
     }
 
     fun saveNoms(title: String, subtitle: String, description: String){
-
+        dataAccess.updateNoms(modelId!!, title, subtitle, description)
     }
 }
 
 
 class ActivityNomsEdit : AppCompatActivity() {
-
     private lateinit var title : EditText
     private lateinit var subtitle : EditText
     private lateinit var description : EditText
@@ -54,7 +54,7 @@ class ActivityNomsEdit : AppCompatActivity() {
         description = findViewById(R.id.textview_description_noms)
 
         button_save.setOnClickListener {
-
+            viewModel.saveNoms(title.text.toString(), subtitle.text.toString(), description.text.toString())
             finish()
         }
         button_cancel.setOnClickListener { finish() }
@@ -78,5 +78,4 @@ class ActivityNomsEdit : AppCompatActivity() {
 
         Log.i("ActivityNomEdit", "Create")
     }
-
 }

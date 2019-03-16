@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -57,7 +58,9 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
         button_edit.setOnClickListener {
             val intent = Intent(this@ActivityNomsView, ActivityNomsEdit::class.java)
             intent.putExtra("nom_id", model.itemId)
-            startActivityForResult(intent, 664)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, nom_panel, "nom_panel")
+            startActivityForResult(intent, 664, options.toBundle())
         }
     }
 

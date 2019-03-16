@@ -23,6 +23,8 @@
         <activity android:name=".ActivityNoms"/>
         <activity android:name=".ActivityNomsAdd"
                   android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ActivityNomsEdit"
+                  android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ActivityGallery"/>
         <activity android:name=".ActivityNomsView"/>
         <activity android:name=".ActivityNomEvents"/>
@@ -32,7 +34,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ActivityNomsEdit"/>
 
         <provider
                 android:name="android.support.v4.content.FileProvider"
