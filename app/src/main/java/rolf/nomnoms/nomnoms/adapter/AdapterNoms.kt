@@ -44,18 +44,16 @@ class AdapterNoms (
 
         val itemId = nomItems[adapterPosition].nomId
 
-        when {
-            //TODO: NEW_EVENT_NOMS REUSED? INSTEAD OF something like NEW_NOMS
-            adapterPosition == nomItems.size-1 ->
-                NomEvent(AdapterNomsEvent.NEW_EVENT_NOMS, -1, null)
-            eventId == AdapterNomsEvent.NEW_EVENT_NOMS ->
+        when (eventId) {
+            AdapterNomsEvent.NEW_EVENT_NOMS ->
                 dateEvent(adapterPosition)
-            eventId == AdapterNomsEvent.DELETE_NOMS ->
+            AdapterNomsEvent.DELETE_NOMS ->
                 NomEvent(eventId, itemId, null)
-            eventId == AdapterNomsEvent.VIEW_NOMS ->
+            AdapterNomsEvent.VIEW_NOMS ->
                 NomEvent(eventId, itemId, sharedView)
-            eventId == AdapterNomsEvent.OPEN_GALLERY ->
+            AdapterNomsEvent.OPEN_GALLERY ->
                 NomEvent(eventId, itemId, sharedView)
+            else -> Toast.makeText(context, "Else happened", Toast.LENGTH_SHORT).show()
         }
     }
 
