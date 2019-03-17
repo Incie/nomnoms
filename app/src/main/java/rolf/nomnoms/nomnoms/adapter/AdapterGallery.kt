@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.listitem_gallery.view.*
 import rolf.nomnoms.nomnoms.R
 
 
-class AdapterGallery (val context: Context, val model : List<NomImageModel>, val showImageId: Int, private val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterGallery (val context: Context, val model : List<NomImageModel>, val showImageId: Int, private val imageEvent: (eventId: Int, nomImage: NomImageModel) -> Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.listitem_gallery, parent, false )
@@ -27,14 +27,19 @@ class AdapterGallery (val context: Context, val model : List<NomImageModel>, val
     }
 }
 
-class ViewHolderGalleryImage(private val view : View,  val imageEvent: (nomImage: NomImageModel) -> Unit) : RecyclerView.ViewHolder(view) {
+class ViewHolderGalleryImage(private val view : View,  val imageEvent: (eventId: Int, nomImage: NomImageModel) -> Unit) : RecyclerView.ViewHolder(view) {
     private val imageView = view.imageView!!
 
     private lateinit var imageModel : NomImageModel
 
     init {
         view.setOnClickListener{
-            imageEvent(imageModel)
+            imageEvent(0, imageModel)
+        }
+
+        view.setOnLongClickListener{
+            imageEvent(1, imageModel)
+            return@setOnLongClickListener true
         }
     }
 

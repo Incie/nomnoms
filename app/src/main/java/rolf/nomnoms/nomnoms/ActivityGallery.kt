@@ -36,7 +36,7 @@ class ActivityGallery : AppCompatActivity() {
 
         recyclerview_images.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         recyclerview_images.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-        recyclerview_images.adapter = AdapterGallery(this, imageList, nomModel.defaultImage, this::onImageSelect)
+        recyclerview_images.adapter = AdapterGallery(this, imageList, nomModel.defaultImage, this::onImageEvent)
 
         val image = imageList.find{ it.imageId == nomModel.defaultImage }
         if( image != null ) {
@@ -46,10 +46,18 @@ class ActivityGallery : AppCompatActivity() {
         }
     }
 
-    private fun onImageSelect(image: NomImageModel){
-        Glide.with(this)
-            .load(image.imagePath)
-            .placeholder(R.drawable.ai_launcher)
-            .into(image_test)
+    private fun onImageEvent(eventId: Int, image: NomImageModel){
+        when(eventId) {
+            0 -> {
+                Glide.with(this)
+                    .load(image.imagePath)
+                    .placeholder(R.drawable.ai_launcher)
+                    .into(image_test)
+            }
+            1 -> {
+                DataAccess(this).setDefaultImage(image.nomId, image.imageId)
+                Toast.makeText(this, "Default Image Set", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
