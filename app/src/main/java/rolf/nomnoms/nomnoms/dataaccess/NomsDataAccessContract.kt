@@ -39,12 +39,14 @@ object NomsDataAccessContract {
         return dbPath
     }
 
-    const val SQL_CREATE_ENTRIES = "CREATE TABLE nomstable ( ${FeedEntry.COLUMN_ID} INTEGER PRIMARY KEY, " +
+    const val SQL_CREATE_ENTRIES = "CREATE TABLE nomstable ( " +
+            "${FeedEntry.COLUMN_ID} INTEGER PRIMARY KEY, " +
             "${FeedEntry.COLUMN_NAME_TITLE} TEXT NOT NULL, " +
             "${FeedEntry.COLUMN_NAME_SUBTITLE} TEXT NOT NULL, " +
             "${FeedEntry.COLUMN_NAME_LATEST_DATE} INTEGER, " +
-            "${FeedEntry.COLUMN_NAME_DESCRIPTION} TEXT NOT NULL)" +
-            "${FeedEntry.COLUMN_NAME_IMAGE_DEFAULT} INTEGER DEFAULT -1"
+            "${FeedEntry.COLUMN_NAME_DESCRIPTION} TEXT NOT NULL," +
+            "${FeedEntry.COLUMN_NAME_IMAGE_DEFAULT} INTEGER DEFAULT -1 " +
+            ")"
 
     const val SQL_CREATE_EVENTS = "CREATE TABLE nomsevent (${FeedEntry.COLUMN_ID} INTEGER PRIMARY KEY, " +
             "${FeedEntry.COLUMN_NOMS_ID_KEY} INTEGER NOT NULL, " +
@@ -56,8 +58,9 @@ object NomsDataAccessContract {
             "${FeedEntry.COLUMN_NAME_IMAGEPATH} TEXT NOT NULL, " +
             "FOREIGN KEY(${FeedEntry.COLUMN_NOMS_ID_KEY}) REFERENCES nomstable(${FeedEntry.COLUMN_ID}) )"
 
-    const val SQL_RAWQUERY_GET_EVENTS = "SELECT t_event.${FeedEntry.COLUMN_ID}, " +
-            "t_noms.${FeedEntry.COLUMN_ID}, " +
+    const val SQL_RAWQUERY_GET_EVENTS = "SELECT " +
+            "t_event.${FeedEntry.COLUMN_ID} as eventId, " +
+            "t_noms.${FeedEntry.COLUMN_ID} as nomId, " +
             "t_noms.${FeedEntry.COLUMN_NAME_TITLE}, " +
             "t_noms.${FeedEntry.COLUMN_NAME_SUBTITLE}, " +
             "t_noms.${FeedEntry.COLUMN_NAME_IMAGE_DEFAULT}, " +
