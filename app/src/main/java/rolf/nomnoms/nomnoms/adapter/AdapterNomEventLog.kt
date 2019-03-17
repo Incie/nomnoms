@@ -24,7 +24,7 @@ class ViewHolderNomEventLog(view: View, onEvent: (Int, Int) -> Unit) : RecyclerV
         view.setOnLongClickListener {
             val position = adapterPosition
             onEvent(0, position)
-            true
+            return@setOnLongClickListener true
         }
     }
 
@@ -37,7 +37,7 @@ class ViewHolderNomEventLog(view: View, onEvent: (Int, Int) -> Unit) : RecyclerV
 }
 
 
-class AdapterNomEventLog( private val context: Context, private val items: List<NomEventViewModel> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class AdapterNomEventLog( private val context: Context, private var items: List<NomEventViewModel> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var model = ArrayList<NomEventViewModel>()
     private var filter = ""
@@ -90,8 +90,14 @@ class AdapterNomEventLog( private val context: Context, private val items: List<
             builder.setTitle("Delete Event")
             builder.setMessage("Delete event '${model.nom.name}'?")
             builder.setPositiveButton("Delete it") { _, _ ->
-                DataAccess(context).deleteEventById(model.nomEvent.eventId)
+                val dataAccess = DataAccess(context)
+                dataAccess.deleteEventById(model.nomEvent.eventId)
+                dataAccess.findAndSetLatesNomDate(model.nomEvent.nomId)
                 Toast.makeText(context, "Deleted ${model.nom.name}'s Event", Toast.LENGTH_SHORT).show()
+
+                items = items.filter { it.nomEvent.eventId != model.nomEvent.eventId }
+
+                updateModel()
                 notifyItemRemoved(adapterPosition)
             }
 

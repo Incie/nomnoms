@@ -82,9 +82,9 @@ class AdapterNoms (
 
         val dataAccess = DataAccess(context)
         dataAccess.insertNomEvent(ModelNomEvent(-1, model.nomId, millis) )
-        dataAccess.updateLatestNomDate(model.nomId, millis)
 
         if( millis > model.latestDate ) {
+            dataAccess.updateLatestNomDate(model.nomId, millis)
             nomItems[adapterPosition] = ModelNoms(model.nomId, model.name, model.subtitle, model.description, millis, model.defaultImage)
             notifyItemChanged(adapterPosition)
         }

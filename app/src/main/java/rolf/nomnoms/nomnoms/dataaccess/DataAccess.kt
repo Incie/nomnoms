@@ -43,8 +43,6 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
 
         readableDatabase!!.close()
 
-        items.forEach( {modelNoms: ModelNoms -> Log.i("DataAccess", "[${modelNoms.nomId}, ${modelNoms.name}, ${modelNoms.subtitle}]") })
-
         Log.i("DataAccess", "Got ${items.size} from db")
         return items
     }
@@ -247,6 +245,26 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
         writableDatabase.close()
 
         Log.i("DataAccess", "Updated id $id with $date")
+    }
+
+    fun findAndSetLatesNomDate(nomId: Long){
+        val cursor = readableDatabase!!.rawQuery(
+            "select max(date) from nomsevent where noms_fkey = $nomId",
+            arrayOf()
+        )
+
+        var latestDate: Long = 0
+        with(cursor) {
+            while(moveToNext()){
+                try {
+                    latestDate = getLong(getColumnIndexOrThrow("max(date)"))
+                } catch(e: Exception){
+                    Log.e("DataAccess", e.toString())
+                }
+            }
+        }
+
+        updateLatestNomDate(nomId, latestDate)
     }
 
     private fun deleteIdFromTable(nomId: Long, table: String, column: String){
