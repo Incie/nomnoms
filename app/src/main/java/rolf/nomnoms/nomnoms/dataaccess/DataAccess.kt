@@ -46,7 +46,7 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
         items.forEach( {modelNoms: ModelNoms -> Log.i("DataAccess", "[${modelNoms.itemId}, ${modelNoms.name}, ${modelNoms.subtitle}]") })
 
         Log.i("DataAccess", "Got ${items.size} from db")
-        return items;
+        return items
     }
 
     fun getEventsByNomId(nomId: Long) : List<ModelNomEvent> {
@@ -130,7 +130,7 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
 
         readableDatabase!!.close()
 
-        Log.i("DataAccess", "Got ${modelNoms?.name} from db")
+        Log.i("DataAccess", "getNomById() nom title:'${modelNoms?.name}' from db")
         return modelNoms;
     }
 
@@ -217,6 +217,22 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
         return insertRet!!.toInt()
     }
 
+    fun updateNoms(id: Long, title: String, subtitle: String, description: String){
+        val updateValues = ContentValues().apply {
+            put(NomsDataAccessContract.FeedEntry.COLUMN_NAME_TITLE, title)
+            put(NomsDataAccessContract.FeedEntry.COLUMN_NAME_SUBTITLE, subtitle)
+            put(NomsDataAccessContract.FeedEntry.COLUMN_NAME_DESCRIPTION, description)
+        }
+
+        val updatesReturn = writableDatabase!!.update(
+            NomsDataAccessContract.FeedEntry.TABLE_NOMS,
+            updateValues,
+            "${NomsDataAccessContract.FeedEntry.COLUMN_ID}=?",
+            arrayOf(id.toString()) )
+
+        Log.i("DataAccess", "updateNoms() update() returned $updatesReturn")
+    }
+
     fun updateLatestNomDate(id: Long, date: Long){
         val updateValues = ContentValues().apply {
             put(NomsDataAccessContract.FeedEntry.COLUMN_NAME_LATEST_DATE, date)
@@ -227,6 +243,8 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
             updateValues,
             "${NomsDataAccessContract.FeedEntry.COLUMN_ID}=?",
             arrayOf(id.toString()) )
+
+        writableDatabase.close()
 
         Log.i("DataAccess", "Updated id $id with $date")
     }

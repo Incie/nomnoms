@@ -4,8 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_noms_add.*
 import rolf.nomnoms.nomnoms.dataaccess.DataAccess
@@ -17,7 +15,7 @@ class ActivityNomsAdd : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_noms_add)
 
-        button_abort.setOnClickListener { finish() }
+        button_edit.setOnClickListener { finish() }
         button_save_and_add_more.setOnClickListener(this::saveNomAndAddMore)
         button_add.setOnClickListener {
             saveNomToDb()

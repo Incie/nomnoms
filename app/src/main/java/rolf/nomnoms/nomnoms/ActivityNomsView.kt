@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
@@ -49,14 +50,18 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
             return
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview_events)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
-
-        camera.setOnClickListener { startCamera() }
+        recyclerview_events.layoutManager = LinearLayoutManager(this)
+        recyclerview_events.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
 
         gallery!!.setOnClickListener(this::onGalleryImageClick)
+        camera.setOnClickListener { startCamera() }
+        button_edit.setOnClickListener {
+            val intent = Intent(this@ActivityNomsView, ActivityNomsEdit::class.java)
+            intent.putExtra("nom_id", model.itemId)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, nom_panel, "nom_panel")
+            startActivityForResult(intent, 664, options.toBundle())
+        }
     }
 
     override fun onStart(){
@@ -67,7 +72,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
     private fun setupData(){
         this.launch {
             var imagePath:String? = null
-            var nomEvents: List<ModelNomEvent>? = null;
+            var nomEvents: List<ModelNomEvent>? = null
             val backgroundTask = async(Dispatchers.Default){
                 val dataAccess = DataAccess(this@ActivityNomsView )
                 val modelNoms = dataAccess.getNomById(nomId)

@@ -26,18 +26,17 @@ class ActivityNoms : AppCompatActivity() {
         list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         list_noms.layoutManager = LinearLayoutManager(this)
 
-        refreshAdapter()
+        if( savedInstanceState == null )
+            refreshAdapter()
     }
 
     private fun refreshAdapter(){
         val allNoms = DataAccess(this).getAll()
 
-        if( list_noms.adapter == null ) {
-            val adapter = AdapterNoms(this, allNoms, this::onNomEvent)
-            list_noms!!.adapter = adapter
-        } else {
+        if( list_noms.adapter == null )
+            list_noms!!.adapter = AdapterNoms(this, allNoms, this::onNomEvent)
+        else
             (list_noms!!.adapter as AdapterNoms).setNoms(allNoms)
-        }
     }
 
     private fun startNewNomActivity(){
@@ -59,8 +58,8 @@ class ActivityNoms : AppCompatActivity() {
 
                     DataAccess(this).deleteNomById(itemId)
                     refreshAdapter()
-                    //todo: get id from somewhere
-                    //update recyclerview
+                    //todo: getNoms id from somewhere
+                    //update single row of recyclerview instead of full refresh
                 }
 
                 builder.show()
