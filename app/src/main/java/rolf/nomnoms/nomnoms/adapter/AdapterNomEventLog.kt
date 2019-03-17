@@ -70,23 +70,7 @@ class AdapterNomEventLog( private val context: Context, private val items: List<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.listitem_nom_events, parent, false)
-        return ViewHolderNomEventLog(view, onEvent = {
-                eventId,adapterPosition ->
-            val model = model[adapterPosition]
-
-            if( eventId == 0 ) {
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("Delete Event")
-                builder.setMessage("Delete '${model.nom.name}'?")
-                builder.setPositiveButton("Delete it") { _, _ ->
-                    DataAccess(context).deleteEventById(model.nomEvent.itemId)
-                    Toast.makeText(context, "Deleted ${model.nom.name}'s Event", Toast.LENGTH_SHORT).show()
-                    notifyItemRemoved(adapterPosition)
-                }
-
-                builder.create().show()
-            }
-        })
+        return ViewHolderNomEventLog(view, this::onEventAction)
     }
 
     override fun getItemCount(): Int {
@@ -95,5 +79,23 @@ class AdapterNomEventLog( private val context: Context, private val items: List<
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ViewHolderNomEventLog).bind(model[position])
+    }
+
+    private fun onEventAction(eventId: Int, adapterPosition: Int)
+     {
+        val model = model[adapterPosition]
+
+        if( eventId == 0 ) {
+            val builder = AlertDialog.Builder(context, R.style.AlertDialogTheme)
+            builder.setTitle("Delete Event")
+            builder.setMessage("Delete event '${model.nom.name}'?")
+            builder.setPositiveButton("Delete it") { _, _ ->
+                DataAccess(context).deleteEventById(model.nomEvent.eventId)
+                Toast.makeText(context, "Deleted ${model.nom.name}'s Event", Toast.LENGTH_SHORT).show()
+                notifyItemRemoved(adapterPosition)
+            }
+
+            builder.create().show()
+        }
     }
 }

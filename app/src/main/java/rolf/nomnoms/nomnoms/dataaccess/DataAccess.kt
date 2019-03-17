@@ -43,7 +43,7 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
 
         readableDatabase!!.close()
 
-        items.forEach( {modelNoms: ModelNoms -> Log.i("DataAccess", "[${modelNoms.itemId}, ${modelNoms.name}, ${modelNoms.subtitle}]") })
+        items.forEach( {modelNoms: ModelNoms -> Log.i("DataAccess", "[${modelNoms.nomId}, ${modelNoms.name}, ${modelNoms.subtitle}]") })
 
         Log.i("DataAccess", "Got ${items.size} from db")
         return items
@@ -143,8 +143,8 @@ class DataAccess(context: Context) : SQLiteOpenHelper(context, NomsDataAccessCon
         val nomEventViewModels = ArrayList<NomEventViewModel>()
         with(cursor) {
             while(moveToNext()) {
-                val eventId = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_ID))
-                val nomId = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_ID))
+                val eventId = getLong(getColumnIndexOrThrow("eventId"))
+                val nomId = getLong(getColumnIndexOrThrow("nomId"))
                 val title = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_TITLE))
                 val subtitle = getString(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_SUBTITLE))
                 val date = getLong(getColumnIndexOrThrow(NomsDataAccessContract.FeedEntry.COLUMN_NAME_DATE))

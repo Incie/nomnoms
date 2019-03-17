@@ -42,7 +42,7 @@ class AdapterNoms (
     private fun onViewEvent(eventId: AdapterNomsEvent, adapterPosition: Int, sharedView: Array<Pair<View,String>>?) {
         Log.i("AdapterNoms", "Event id = $eventId")
 
-        val itemId = nomItems[adapterPosition].itemId
+        val itemId = nomItems[adapterPosition].nomId
 
         when {
             //TODO: NEW_EVENT_NOMS REUSED? INSTEAD OF something like NEW_NOMS
@@ -81,11 +81,11 @@ class AdapterNoms (
         Toast.makeText(context, "Added new event for '${model.name}'", Toast.LENGTH_SHORT).show()
 
         val dataAccess = DataAccess(context)
-        dataAccess.insertNomEvent(ModelNomEvent(-1, model.itemId, millis) )
-        dataAccess.updateLatestNomDate(model.itemId, millis)
+        dataAccess.insertNomEvent(ModelNomEvent(-1, model.nomId, millis) )
+        dataAccess.updateLatestNomDate(model.nomId, millis)
 
         if( millis > model.latestDate ) {
-            nomItems[adapterPosition] = ModelNoms(model.itemId, model.name, model.subtitle, model.description, millis, model.defaultImage)
+            nomItems[adapterPosition] = ModelNoms(model.nomId, model.name, model.subtitle, model.description, millis, model.defaultImage)
             notifyItemChanged(adapterPosition)
         }
     }

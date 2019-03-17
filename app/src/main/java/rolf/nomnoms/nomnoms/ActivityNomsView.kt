@@ -12,7 +12,6 @@ import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -57,7 +56,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
         camera.setOnClickListener { startCamera() }
         button_edit.setOnClickListener {
             val intent = Intent(this@ActivityNomsView, ActivityNomsEdit::class.java)
-            intent.putExtra("nom_id", model.itemId)
+            intent.putExtra("nom_id", model.nomId)
 
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, nom_panel, "nom_panel")
             startActivityForResult(intent, 664, options.toBundle())
@@ -109,7 +108,7 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
 
     private fun onGalleryImageClick(view: View ){
         val intent = Intent(this@ActivityNomsView, ActivityGallery::class.java)
-        intent.putExtra("nom_id", model.itemId)
+        intent.putExtra("nom_id", model.nomId)
         startActivityForResult(intent, 665)
     }
 
@@ -145,10 +144,10 @@ class ActivityNomsView : AppCompatActivity(), CoroutineScope {
             Log.e("Photo", "$mCurrentPhotoPath resultCode: $resultCode ${Activity.RESULT_OK} = OK")
 
             val dataAccess = DataAccess(this)
-            val imageId = dataAccess.insertImage(mCurrentPhotoPath, model.itemId.toInt() )
+            val imageId = dataAccess.insertImage(mCurrentPhotoPath, model.nomId.toInt() )
 
             if( model.defaultImage < 0 ) {
-                dataAccess.setDefaultImage(model.itemId.toInt(), imageId)
+                dataAccess.setDefaultImage(model.nomId.toInt(), imageId)
                 Glide.with(this).load(mCurrentPhotoPath).into(gallery!!)
             }
         }

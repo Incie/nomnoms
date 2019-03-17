@@ -17,7 +17,7 @@ class ViewHolderNomEvent(view: View) : RecyclerView.ViewHolder(view) {
     private val textSpan = view.textview_span
 
     fun bind(nomEvent: ModelNomEvent) {
-        textTimespan.text = "${nomEvent.nomId}, ${nomEvent.itemId}"
+        textTimespan.text = "${nomEvent.nomId}, ${nomEvent.eventId}"
 
         textSpan.text = epochToSpan(nomEvent.date)
         textDate.text = epochToDate(nomEvent.date)
