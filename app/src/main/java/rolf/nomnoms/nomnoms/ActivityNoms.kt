@@ -26,8 +26,12 @@ class ActivityNoms : AppCompatActivity() {
         list_noms.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         list_noms.layoutManager = LinearLayoutManager(this)
 
-        if( savedInstanceState == null )
-            refreshAdapter()
+        refreshAdapter()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refreshAdapter()
     }
 
     private fun refreshAdapter(){
@@ -125,9 +129,7 @@ class ActivityNoms : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if( requestCode == 666 )
-            refreshAdapter()
-
+        refreshAdapter()
         super.onActivityResult(requestCode, resultCode, data)
     }
 }
